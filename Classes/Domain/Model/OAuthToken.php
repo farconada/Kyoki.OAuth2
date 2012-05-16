@@ -15,45 +15,35 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * @FLOW3\Entity
  */
-class OAuthConsumer
+class OAuthToken
 {
     /**
-     * @FLOW3\Identity
-     * @ORM\Id
      * @var string
      * @FLOW3\Validate(type="NotEmpty")
      */
-    protected $token;
+    protected $accessToken;
+
+	/**
+	 * @var string
+	 * @FLOW3\Validate(type="NotEmpty")
+	 */
+	protected $refreshToken;
 
     /**
      * @var \DateTime
      */
-    protected $lastUsed;
+    protected $creationDate;
 
+	/**
+	 * @var string
+	 */
+	protected $tokenType;
 
-    /**
-     * @var \TYPO3\Party\Domain\Model\AbstractParty
-     * @ORM\ManyToOne
-     * @FLOW3\Validate(type="NotEmpty")
-     */
-    protected $party;
+	/**
+	 * @var int
+	 */
+	protected $expiresIn;
 
-    /**
-     * @var \Kyoki\OAuth2\Domain\Model\OAuthApi
-     * @ORM\ManyToOne
-     * @FLOW3\Validate(type="NotEmpty")
-     */
-    protected $api;
-
-    /**
-     * @var string
-     */
-    protected $scope;
-
-    /**
-     * @var string
-     */
-    protected $description;
 
     /**
      * @param string $description
@@ -122,16 +112,44 @@ class OAuthConsumer
     /**
      * @param string $token
      */
-    public function setToken($token)
+    public function setAccessToken($token)
     {
-        $this->token = $token;
+        $this->accessToken = $token;
     }
 
     /**
      * @return string
      */
-    public function getToken()
+    public function getAccessToken()
     {
-        return $this->token;
+        return $this->accessToken;
     }
+
+	/**
+	 * @param string $refreshToken
+	 */
+	public function setRefreshToken($refreshToken) {
+		$this->refreshToken = $refreshToken;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRefreshToken() {
+		return $this->refreshToken;
+	}
+
+	/**
+	 * @param \Kyoki\OAuth2\Domain\Model\OAuthApi $api
+	 */
+	public function setApi($api) {
+		$this->api = $api;
+	}
+
+	/**
+	 * @return \Kyoki\OAuth2\Domain\Model\OAuthApi
+	 */
+	public function getApi() {
+		return $this->api;
+	}
 }

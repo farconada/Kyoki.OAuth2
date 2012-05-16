@@ -36,9 +36,6 @@ class StandardController extends \TYPO3\FLOW3\Mvc\Controller\ActionController
      */
     public function indexAction()
     {
-        $this->view->assign('foos', array(
-            'bar', 'baz'
-        ));
     }
 
     private function identifyUser($auth_header)
@@ -86,7 +83,7 @@ class StandardController extends \TYPO3\FLOW3\Mvc\Controller\ActionController
     {
         if (!$isAuthorized) {
             $accessToken = $this->oauthService->computeAccessToken();
-            $this->redirect('grant', NULL, NULL, array('accesstoken' => $accessToken));
+            $this->redirect('grant', NULL, NULL, array('access_token' => $accessToken));
         } else {
             $this->redirect('deny');
         }
@@ -102,7 +99,6 @@ class StandardController extends \TYPO3\FLOW3\Mvc\Controller\ActionController
     public function grantAction($accesstoken,$scope,$description)
     {
 
-        $this->oauthConsumerRepository->
 
     }
 
