@@ -28,13 +28,21 @@ class OAuthCommandController extends   \TYPO3\FLOW3\Cli\CommandController {
 	 */
 	protected $oauthScopeRepository;
 
-	public function newClientAction($description, $redirect_uri) {
+	/**
+	 * @param string $description
+	 * @param string $redirect_uri
+	 */
+	public function newClientCommand($description, $redirect_uri) {
 		$oauthClient = new OAuthClient($description, $redirect_uri);
 		$this->oauthClientRepository->add($oauthClient);
 		echo 'Cliente creado, Id: ' . $oauthClient->getClientId(), ' Secret: ' . $oauthClient->getSecret();
 	}
 
-	public function newScopeAction($id, $description) {
+	/**
+	 * @param string $id
+	 * @param string $description
+	 */
+	public function newScopeCommand($id, $description) {
 		$oauthScope = new OAuthScope($id, $description);
 		$this->oauthScopeRepository->add($oauthScope);
 		echo 'Scope creado, Id: ' . $oauthScope->getId() . ' Description: ' . $oauthScope->getDescription();
