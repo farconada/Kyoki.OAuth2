@@ -9,14 +9,15 @@ namespace Kyoki\OAuth2\Domain\Model;
  */
 use Doctrine\ORM\Mapping as ORM;
 use TYPO3\FLOW3\Annotations as FLOW3;
-use \Kyoki\OAuth2\Domain\Model\OAuthClient;
-
+use Kyoki\OAuth2\Domain\Model\OAuthClient;
+use Kyoki\OAuth2\Domain\Model\OAuthScope;
+use TYPO3\Party\Domain\Model\AbstractParty;
 /**
  * An OAuth consumer
  *
  * @FLOW3\Entity
  */
-class OAuthApi
+class OAuthCode
 {
     /**
      * @var \Kyoki\OAuth2\Domain\Model\OAuthClient
@@ -30,6 +31,11 @@ class OAuthApi
      * @var string
      */
     protected $code;
+
+	/**
+	 * @var boolean
+	 */
+	protected $enabled;
 
     /**
      * @var \TYPO3\Party\Domain\Model\AbstractParty
@@ -49,10 +55,13 @@ class OAuthApi
     protected $party;
 
 
-	public function __construct(OAuthClient $OAuthClient) {
+	public function __construct(OAuthClient $OAuthClient, AbstractParty $party, OAuthScope $scope) {
 		$secret = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
 		$this->code = $secret ;
+		$this->enabled = FALSE;
 		$this->setClientId($OAuthClient);
+		$this->setParty($party);
+		$this->setOauthScope($scope);
 	}
 
 
@@ -71,7 +80,7 @@ class OAuthApi
 		return $this->oauthClient;
 	}
 
-	public function setOauthScope($oauthScope) {
+	protected function setOauthScope($oauthScope) {
 		$this->oauthScope = $oauthScope;
 	}
 
@@ -82,7 +91,7 @@ class OAuthApi
 	/**
 	 * @param \TYPO3\Party\Domain\Model\AbstractParty $party
 	 */
-	public function setParty($party) {
+	protected  function setParty($party) {
 		$this->party = $party;
 	}
 
@@ -105,6 +114,20 @@ class OAuthApi
 	 */
 	public function getRedirectUri() {
 		return $this->redirectUri;
+	}
+
+	/**
+	 * @param boolean $enabled
+	 */
+	public function setEnabled($enabled) {
+		$this->enabled = $enabled;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getEnabled() {
+		return $this->enabled;
 	}
 
 }
