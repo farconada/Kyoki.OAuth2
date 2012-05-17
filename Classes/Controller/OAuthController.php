@@ -31,6 +31,7 @@ class OAuthController extends \TYPO3\FLOW3\Mvc\Controller\ActionController
 	 * @FLOW3\Inject
 	 */
 	protected $oauthCodeRepository;
+
 	/**
 	 * @param string $response_type
 	 * @param OAuthClient $client_id
