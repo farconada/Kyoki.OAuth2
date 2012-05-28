@@ -43,6 +43,7 @@ class OAuthController extends \TYPO3\FLOW3\Mvc\Controller\ActionController
 			throw new OAuthException('La URL de redireccion no concuerda con las autorizdaad',1337249067);
 		}
 		$oauthCode = new OAuthCode($client_id,$this->securityContext->getParty(),$scope);
+        $oauthCode->setRedirectUri($redirect_uri);
 		switch ($response_type) {
 		    case 'code':
 		        $this->oauthCodeRepository->add($oauthCode);
@@ -65,12 +66,12 @@ class OAuthController extends \TYPO3\FLOW3\Mvc\Controller\ActionController
 	 * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $oauthCode
 	 */
 	public function grantAction(OAuthCode $oauthCode){
+        //TODO crear un aspecto para que solo se puedan pasar Codes cuyo party sea el usuario logeado
 		$oauthCode->setEnabled(TRUE);
 		$this->oauthCodeRepository->update($oauthCode);
 		$this->redirectToUri($oauthCode->getRedirectUri() . '?' . http_build_query(array('code' => $oauthCode->getCode()), null,'&'));
 	}
 
 	public function denyAction(){
-		$this->view->assign('message', 'Acceso no concedido');
 	}
 }

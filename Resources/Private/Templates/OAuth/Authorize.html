@@ -1,15 +1,69 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
 <head>
+    <meta charset="utf-8"/>
+
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width"/>
+
     <title>Authorization request</title>
+
+    <!-- Included CSS Files -->
+    <link rel="stylesheet" href="{f:uri.resource(path: 'stylesheets/foundation.css')}">
+    <link rel="stylesheet" href="{f:uri.resource(path: 'stylesheets/app.css')}">
+
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" href="{f:uri.resource(path: 'stylesheets/ie.css')}">
+    <![endif]-->
+
+    <script src="{f:uri.resource(path: 'javascripts/modernizr.foundation.js')}"></script>
+
+    <!-- IE Fix for HTML5 Tags -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
 </head>
 <body>
-    <p>
-            You have received an authorization request for the scope: <br  />
-            {oauthScope.id}: {oauthScope.description}
-    </p>
-    <f:link.action action="grant" arguments="{oauthCode: oauthCode}">Grant</f:link.action>
-    <f:link.action action="deny">Deny</f:link.action>
+
+<!-- container -->
+<div class="container">
+
+    <div class="row">
+        <div class="nine columns">
+            <h3>Authorization request</h3>
+            <div class="panel">
+                <p>
+                    You have received an authorization request for the scope: <br/>
+                    <strong>{oauthScope.id}: {oauthScope.description}</strong>
+                </p>
+                <f:link.action action="grant" arguments="{oauthCode: oauthCode}"
+                               class="nice radius blue button">Grant
+                </f:link.action>
+                <f:link.action action="deny" class="nice radius red button">Deny</f:link.action>
+            </div>
+        </div>
+        <div class="three columns">
+            <img src="{f:uri.resource(path: 'images/oauth-2-sm.png')}">
+        </div>
+
+    </div>
+    <!-- container -->
+
+
+    <!-- Included JS Files -->
+    <script src="{f:uri.resource(path: 'javascripts/jquery.min.js')}"></script>
+    <script src="{f:uri.resource(path: 'javascripts/foundation.js')}"></script>
+    <script src="{f:uri.resource(path: 'javascripts/app.js')}"></script>
+
 </body>
 </html>
