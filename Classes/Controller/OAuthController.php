@@ -34,27 +34,28 @@ class OAuthController extends \TYPO3\FLOW3\Mvc\Controller\ActionController
 
 	/**
 	 * @param string $response_type
-	 * @param OAuthClient $client_id
+	 * @param Kyoki\OAuth2\Domain\Model\OAuthClient $client_id
 	 * @param string $redirect_uri
-	 * @param OAuthScope $scope
+	 * @param Kyoki\OAuth2\Domain\Model\OAuthScope $scope
 	 */
 	public function authorizeAction($response_type,OAuthClient $client_id, $redirect_uri, OAuthScope $scope) {
-		if (!preg_match('/' . $client_id->getRedirectUri() . '/', $redirect_uri)) {
-			throw new OAuthException(1337249067,'La URL de redireccion no concuerda con las autorizadas');
+		if (!preg_match('/' . urlencode($client_id->getRedirectUri()) . '/', urlencode($redirect_uri))) {
+			throw new OAuthException('La URL de redireccion no concuerda con las autorizdaad',1337249067);
 		}
 		$oauthCode = new OAuthCode($client_id,$this->securityContext->getParty(),$scope);
 		switch ($response_type) {
 		    case 'code':
 		        $this->oauthCodeRepository->add($oauthCode);
+		        $this->persistenceManager->persistAll();
 		        $this->view->assign('oauthCode', $oauthCode);
-		        $this->view->assign('aouthScope', $scope);
+		        $this->view->assign('oauthScope', $scope);
 		        break;
 		    case 'refresh':
 		        // TODO implementa refresh
-			    throw new OAuthException(1337249155,'Response Type no implentado');
+			    throw new OAuthException('Response Type no implentado',1337249155);
 		        break;
 			default:
-				throw new OAuthException(1337249132,'Response Type no implentado');
+				throw new OAuthException('Response Type no implentado', 1337249132);
 		}
 
 

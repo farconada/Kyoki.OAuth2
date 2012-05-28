@@ -38,7 +38,7 @@ class OAuthCode
 	protected $enabled;
 
     /**
-     * @var \TYPO3\Party\Domain\Model\AbstractParty
+     * @var \Kyoki\OAuth2\Domain\Model\OAuthScope
      * @ORM\ManyToOne
      */
     protected $oauthScope;
@@ -59,7 +59,7 @@ class OAuthCode
 		$secret = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
 		$this->code = $secret ;
 		$this->enabled = FALSE;
-		$this->setClientId($OAuthClient);
+		$this->setOauthClient($OAuthClient);
 		$this->setParty($party);
 		$this->setOauthScope($scope);
 	}

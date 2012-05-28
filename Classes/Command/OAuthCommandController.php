@@ -29,13 +29,40 @@ class OAuthCommandController extends   \TYPO3\FLOW3\Cli\CommandController {
 	protected $oauthScopeRepository;
 
 	/**
+	 * @FLOW3\Inject
+	 * @var \TYPO3\FLOW3\Persistence\PersistenceManagerInterface
+	 */
+	protected $persistenceManager;
+
+	/*
+	* @var array
+	*/
+	protected $settings;
+
+	/**
+	 * @param array $settings
+	 * @return void
+	 */
+	public function injectSettings(array $settings) {
+		$this->settings = $settings;
+	}
+
+	/**
 	 * @param string $description
 	 * @param string $redirect_uri
 	 */
-	public function newClientCommand($description, $redirect_uri) {
+	public function newClientCommand($description, $redirect_uri, $partyUUID=NULL) {
 		$oauthClient = new OAuthClient($description, $redirect_uri);
+		if (!$partyUUID) {
+			$party = $this->persistenceManager->getObjectByIdentifier($this->settings['Client']['DefaultPartyUUID'],$this->settings['Client']['PartyClassName']);
+		} else {
+			$party = $this->persistenceManager->getObjectByIdentifier($partyUUID,$this->settings['Client']['PartyClassName']);
+		}
+		$oauthClient->setParty($party);
 		$this->oauthClientRepository->add($oauthClient);
-		echo 'Cliente creado, Id: ' . $oauthClient->getClientId(), ' Secret: ' . $oauthClient->getSecret();
+		$this->persistenceManager->persistAll();
+
+		echo 'Cliente creado, Id: ' . $oauthClient->getClientId(), ' Secret: ' . $oauthClient->getSecret() . "\n";
 	}
 
 	/**
@@ -45,6 +72,7 @@ class OAuthCommandController extends   \TYPO3\FLOW3\Cli\CommandController {
 	public function newScopeCommand($id, $description) {
 		$oauthScope = new OAuthScope($id, $description);
 		$this->oauthScopeRepository->add($oauthScope);
-		echo 'Scope creado, Id: ' . $oauthScope->getId() . ' Description: ' . $oauthScope->getDescription();
+		$this->persistenceManager->persistAll();
+		echo 'Scope creado, Id: ' . $oauthScope->getId() . ' Description: ' . $oauthScope->getDescription(). "\n";
 	}
 }

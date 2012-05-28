@@ -1,0 +1,5 @@
+Kyoki:
+  OAuth2:
+    Client:
+      DefaultPartyUUID: 'd07b121f-5940-4326-844b-87d3654a38ea'
+      PartyClassName: 'F2\TuitLawyer\Domain\Model\Usuario'

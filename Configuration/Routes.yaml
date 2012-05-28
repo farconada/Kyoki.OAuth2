@@ -1,0 +1,8 @@
+-
+  name: 'authorization page'
+  uriPattern:    'authorize'
+  defaults:
+        '@package':    'Kyoki.OAuth2'
+        '@controller': 'OAuth'
+        '@format':     'html'
+        '@action':     'authorize'
