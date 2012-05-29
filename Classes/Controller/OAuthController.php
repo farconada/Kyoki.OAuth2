@@ -72,6 +72,22 @@ class OAuthController extends \TYPO3\FLOW3\Mvc\Controller\ActionController
 		$this->redirectToUri($oauthCode->getRedirectUri() . '?' . http_build_query(array('code' => $oauthCode->getCode()), null,'&'));
 	}
 
-	public function denyAction(){
+	public function denyAction(OAuthCode $oauthCode){
+		$this->redirectToUri($oauthCode->getRedirectUri() . '?' . http_build_query(array('error' => 'access_denied'), null,'&'));
+		$this->oauthCodeRepository->remove($oauthCode);
+	}
+
+	public function processRequest(\TYPO3\FLOW3\Mvc\RequestInterface $request, \TYPO3\FLOW3\Mvc\ResponseInterface $response) {
+		try {
+			parent::processRequest($request, $response);
+		} catch (\Exception $ex) {
+			// TODO soportar mas tipos de error y mostrarlos mejorcon un template
+			echo  json_encode(array('error' => 'server_error'));
+		}
+
+	}
+
+	public function tokenAction(OAuthCode $oauthCode) {
+
 	}
 }
