@@ -11,13 +11,14 @@ use Kyoki\OAuth2\Domain\Model\OAuthClient;
 use Kyoki\OAuth2\Domain\Model\OAuthScope;
 use Kyoki\OAuth2\Domain\Model\OAuthCode;
 use Kyoki\OAuth2\Exception\OAuthException;
+use Kyoki\OAuth2\Controller\OAuthAbstractController;
 
 /**
  * OAuth controller for the Kyoki.OAuth2 package
  *
  * @FLOW3\Scope("singleton")
  */
-class OAuthController extends \TYPO3\FLOW3\Mvc\Controller\ActionController
+class OAuthController extends OAuthAbstractController
 {
 	/**
 	 * @var \TYPO3\FLOW3\Security\Context
@@ -40,33 +41,24 @@ class OAuthController extends \TYPO3\FLOW3\Mvc\Controller\ActionController
 	 */
 	public function authorizeAction($response_type,OAuthClient $client_id, $redirect_uri, OAuthScope $scope) {
 		if (!preg_match('/' . urlencode($client_id->getRedirectUri()) . '/', urlencode($redirect_uri))) {
-			throw new OAuthException('La URL de redireccion no concuerda con las autorizdaad',1337249067);
+			throw new OAuthException('La URL de redireccion no concuerda con las autorizada',1337249067);
 		}
 		$oauthCode = new OAuthCode($client_id,$this->securityContext->getParty(),$scope);
         $oauthCode->setRedirectUri($redirect_uri);
-		switch ($response_type) {
-		    case 'code':
-		        $this->oauthCodeRepository->add($oauthCode);
-		        $this->persistenceManager->persistAll();
-		        $this->view->assign('oauthCode', $oauthCode);
-		        $this->view->assign('oauthScope', $scope);
-		        break;
-		    case 'refresh':
-		        // TODO implementa refresh
-			    throw new OAuthException('Response Type no implentado',1337249155);
-		        break;
-			default:
-				throw new OAuthException('Response Type no implentado', 1337249132);
-		}
-
-
+        if ($response_type == 'code' ) {
+            $this->oauthCodeRepository->add($oauthCode);
+            $this->persistenceManager->persistAll();
+            $this->view->assign('oauthCode', $oauthCode);
+            $this->view->assign('oauthScope', $scope);
+        } else {
+            throw new OAuthException('Response Type not implemented', 1337249132);
+        }
 	}
 
 	/**
 	 * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $oauthCode
 	 */
 	public function grantAction(OAuthCode $oauthCode){
-        //TODO crear un aspecto para que solo se puedan pasar Codes cuyo party sea el usuario logeado
 		$oauthCode->setEnabled(TRUE);
 		$this->oauthCodeRepository->update($oauthCode);
 		$this->redirectToUri($oauthCode->getRedirectUri() . '?' . http_build_query(array('code' => $oauthCode->getCode()), null,'&'));
@@ -77,17 +69,5 @@ class OAuthController extends \TYPO3\FLOW3\Mvc\Controller\ActionController
 		$this->oauthCodeRepository->remove($oauthCode);
 	}
 
-	public function processRequest(\TYPO3\FLOW3\Mvc\RequestInterface $request, \TYPO3\FLOW3\Mvc\ResponseInterface $response) {
-		try {
-			parent::processRequest($request, $response);
-		} catch (\Exception $ex) {
-			// TODO soportar mas tipos de error y mostrarlos mejorcon un template
-			echo  json_encode(array('error' => 'server_error'));
-		}
 
-	}
-
-	public function tokenAction(OAuthCode $oauthCode) {
-
-	}
 }

@@ -15,5 +15,10 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * @FLOW3\Scope("singleton")
  */
 class OAuthTokenRepository extends \TYPO3\FLOW3\Persistence\Repository {
+    public function findByRefreshToken($refresh_token) {
+        $query = $this->createQuery();
+        $query = $query->matching($query->equals('refreshToken', $refresh_token));
+        return $query->execute();
 
+    }
 }
