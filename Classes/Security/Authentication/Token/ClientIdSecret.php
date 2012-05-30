@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\FLOW3\Security\Authentication\Token;
+namespace Kyoki\OAuth2\Security\Authentication\Token;
 
 /*                                                                        *
  * This script belongs to the FLOW3 framework.                            *

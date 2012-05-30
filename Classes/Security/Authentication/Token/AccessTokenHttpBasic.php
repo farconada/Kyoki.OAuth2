@@ -15,7 +15,7 @@ namespace Kyoki\OAuth2\Security\Authentication\Token;
  * An authentication token used for simple username and password authentication via HTTP Basic Auth.
  *
  */
-class ClientIdSecretHttpBasic extends ClientIdSecret {
+class AccessTokenHttpBasic extends ClientIdSecret {
 
 	/**
 	 * Updates the username and password credentials from the HTTP authorization header.
@@ -27,13 +27,12 @@ class ClientIdSecretHttpBasic extends ClientIdSecret {
 	 */
 	public function updateCredentials(\TYPO3\FLOW3\Mvc\ActionRequest $actionRequest) {
 		$authorizationHeader = $actionRequest->getHttpRequest()->getHeaders()->get('Authorization');
-		if (substr($authorizationHeader, 0, 5) === 'Basic') {
+		if (substr($authorizationHeader, 0, 5) === 'OAuth') {
 			$credentials = base64_decode(substr($authorizationHeader, 6));
-			$this->credentials['client_id'] = substr($credentials, 0, strpos($credentials, ':'));
-			$this->credentials['client_secret'] = substr($credentials, strpos($credentials, ':') + 1);
+			$this->credentials['access_token'] = trim($credentials);
 			$this->setAuthenticationStatus(self::AUTHENTICATION_NEEDED);
 		} else {
-			$this->credentials = array('client_id' => NULL, 'client_secret' => NULL);
+			$this->credentials = array('access_token' => NULL);
 			$this->authenticationStatus = self::NO_CREDENTIALS_GIVEN;
 		}
 	}
