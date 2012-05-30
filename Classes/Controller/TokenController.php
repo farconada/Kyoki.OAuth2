@@ -14,6 +14,7 @@ use Kyoki\OAuth2\Controller\OAuthAbstractController;
 
 /**
  * Token controller for the Kyoki.OAuth2 package
+ * Manages de generation of Access Tokens and Refresh Tokens
  *
  * @FLOW3\Scope("singleton")
  */
@@ -28,6 +29,7 @@ class TokenController extends OAuthAbstractController
 
     /**
      * Token endpoint
+     * Should be authenticated by client_id and client_secret
      *
      * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $oauthCode
      * @param string $grant_type

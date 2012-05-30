@@ -17,6 +17,12 @@ use Kyoki\OAuth2\Exception\OAuthException;
 abstract class OAuthAbstractController extends \TYPO3\FLOW3\Mvc\Controller\ActionController
 {
 
+	/**
+	 * Mainly for managin extensions
+	 *
+	 * @param \TYPO3\FLOW3\Mvc\RequestInterface $request
+	 * @param \TYPO3\FLOW3\Mvc\ResponseInterface $response
+	 */
 	public function processRequest(\TYPO3\FLOW3\Mvc\RequestInterface $request, \TYPO3\FLOW3\Mvc\ResponseInterface $response) {
 		try {
 			parent::processRequest($request, $response);

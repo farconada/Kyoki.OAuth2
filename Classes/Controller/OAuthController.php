@@ -15,6 +15,7 @@ use Kyoki\OAuth2\Controller\OAuthAbstractController;
 
 /**
  * OAuth controller for the Kyoki.OAuth2 package
+ * Manages the permission request and exchanges an OAuth Code
  *
  * @FLOW3\Scope("singleton")
  */
@@ -34,6 +35,8 @@ class OAuthController extends OAuthAbstractController
 	protected $oauthCodeRepository;
 
 	/**
+	 * Authenticate and request permission
+	 *
 	 * @param string $response_type
 	 * @param Kyoki\OAuth2\Domain\Model\OAuthClient $client_id
 	 * @param string $redirect_uri
@@ -56,6 +59,8 @@ class OAuthController extends OAuthAbstractController
 	}
 
 	/**
+	 * Access granted, return a OAuth Code
+	 *
 	 * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $oauthCode
 	 */
 	public function grantAction(OAuthCode $oauthCode){
@@ -64,6 +69,11 @@ class OAuthController extends OAuthAbstractController
 		$this->redirectToUri($oauthCode->getRedirectUri() . '?' . http_build_query(array('code' => $oauthCode->getCode()), null,'&'));
 	}
 
+	/**
+	 * Access denied
+	 *
+	 * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $oauthCode
+	 */
 	public function denyAction(OAuthCode $oauthCode){
 		$this->redirectToUri($oauthCode->getRedirectUri() . '?' . http_build_query(array('error' => 'access_denied'), null,'&'));
 		$this->oauthCodeRepository->remove($oauthCode);
