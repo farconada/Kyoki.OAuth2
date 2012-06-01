@@ -14,8 +14,7 @@ use Kyoki\OAuth2\Exception\OAuthException;
  *
  * @FLOW3\Scope("singleton")
  */
-abstract class OAuthAbstractController extends \TYPO3\FLOW3\Mvc\Controller\ActionController
-{
+abstract class OAuthAbstractController extends \TYPO3\FLOW3\Mvc\Controller\ActionController {
 
 	/**
 	 * Mainly for managin extensions
@@ -26,11 +25,20 @@ abstract class OAuthAbstractController extends \TYPO3\FLOW3\Mvc\Controller\Actio
 	public function processRequest(\TYPO3\FLOW3\Mvc\RequestInterface $request, \TYPO3\FLOW3\Mvc\ResponseInterface $response) {
 		try {
 			parent::processRequest($request, $response);
-		} catch (\Exception $ex) {
+		} catch (\TYPO3\FLOW3\Mvc\Exception\RequiredArgumentMissingException $ex) {
 			// TODO soportar mas tipos de error y mostrarlos mejor con un template
-			echo  json_encode(array('error' => 'server_error'));
+			echo  json_encode(
+				array(
+					'error' => 'server_error',
+					'error_message' => $ex->getMessage()
+				));
+		} catch (OAuthException $ex) {
+			// TODO soportar mas tipos de error y mostrarlos mejor con un template
+			echo  json_encode(
+				array(
+					'error' => 'server_error',
+					'error_message' => $ex->getMessage()
+				));
 		}
-
 	}
-
 }

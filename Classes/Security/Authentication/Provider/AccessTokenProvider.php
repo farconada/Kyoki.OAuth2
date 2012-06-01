@@ -18,7 +18,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * TYPO3\FLOW3\Security\Authentication\Token\UsernamePassword tokens.
  * The accounts are stored in the Content Repository.
  */
-class ClientIdSecretProvider extends \TYPO3\FLOW3\Security\Authentication\Provider\AbstractProvider {
+class AccessTokenProvider extends \TYPO3\FLOW3\Security\Authentication\Provider\AbstractProvider {
 
 	/**
 	 * @var \Kyoki\OAuth2\Domain\Repository\OAuthCodeRepository
