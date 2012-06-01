@@ -37,6 +37,7 @@ class OAuthController extends OAuthAbstractController
 	/**
 	 * Authenticate and request permission
 	 *
+     * @FLOW3\SkipCsrfProtection
 	 * @param string $response_type
 	 * @param Kyoki\OAuth2\Domain\Model\OAuthClient $client_id
 	 * @param string $redirect_uri
