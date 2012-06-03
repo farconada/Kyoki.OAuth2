@@ -31,11 +31,11 @@ class TokenController extends OAuthAbstractController
      * Token endpoint
      * Should be authenticated by client_id and client_secret
      *
-     * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $oauthCode
      * @param string $grant_type
+     * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $code
      * @param string $refresh_token
      */
-    public function tokenAction($grant_type, OAuthCode $oauthCode = NULL, $refresh_token = ''  ) {
+    public function tokenAction($grant_type, OAuthCode $code = NULL, $refresh_token = ''  ) {
         if ($grant_type == 'refresh_token') {
             $token = $this->oauthTokenRepository->findByRefreshToken($refresh_token);
             if ($token) {
@@ -43,7 +43,7 @@ class TokenController extends OAuthAbstractController
 
             }
         }
-        $token = new OAuthToken($oauthCode,3600,'Bearer');
+        $token = new OAuthToken($code,3600,'Bearer');
         $this->oauthTokenRepository->add($token);
         return json_encode(array(
             'access_token'  => $token->getAccessToken(),

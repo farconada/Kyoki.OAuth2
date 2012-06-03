@@ -59,6 +59,8 @@ class OAuthToken
         $refresh = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
         $this->setRefreshToken($refresh);
         $this->setCreationDate(new \DateTime());
+        $this->setExpiresIn($expiresIn);
+        $this->setTokenType($tokenType);
     }
 
     /**

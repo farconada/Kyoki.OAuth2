@@ -46,10 +46,10 @@ class ParametersAspect {
      */
     public function validateTokenParameters(\TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint) {
         $arguments = $joinPoint->getMethodArguments();
-        if ($arguments['grant_type'] != 'refresh_token' || $arguments['grant_type'] != 'authorization_code') {
+        if ($arguments['grant_type'] != 'refresh_token' && $arguments['grant_type'] != 'access_token') {
             throw new OAuthException('unsupported grant type', 1338317418);
         }
-        if ($arguments['grant_type'] == 'authorization_code' && !$arguments['oauthCode']) {
+        if ($arguments['grant_type'] == 'access_token' && !$arguments['code']) {
             throw new OAuthException('code not set', 1338317419);
         }
     }
@@ -60,11 +60,11 @@ class ParametersAspect {
      * @FLOW3\Before("Kyoki\OAuth2\Aspect\ParametersAspect->allOAuthControllerMethods")
      */
     public function validateOAuthCode(\TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint) {
-        if ($joinPoint->isMethodArgument('oauthCode')) {
+        if ($joinPoint->isMethodArgument('code')) {
             /**
              * @var $code \Kyoki\OAuth2\Domain\Model\OAuthCode;
              */
-            $code = $joinPoint->getMethodArgument('oauthCode');
+            $code = $joinPoint->getMethodArgument('code');
             if ($this->securityContext->getParty() != $code->getParty()) {
                 throw new OAuthException('You are not the owner of this security code', 1338318722);
             }

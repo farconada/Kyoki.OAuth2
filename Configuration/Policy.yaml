@@ -1,0 +1,11 @@
+resources:
+  methods:
+    Kyoki_OAuth2: 'method(Kyoki\OAuth2\Controller\OAuthController->.*Action())'
+    Kyoki_OAuth2_TokenEndpoint: 'method(Kyoki\OAuth2\Controller\TokenController->.*Action())'
+acls:
+  OAuth:
+    methods:
+      Kyoki_OAuth2: GRANT
+      Kyoki_OAuth2_TokenEndpoint: GRANT
+
+

@@ -6,3 +6,11 @@
         '@controller': 'OAuth'
         '@format':     'html'
         '@action':     'authorize'
+-
+  name: 'token endpoint page'
+  uriPattern:    'token'
+  defaults:
+        '@package':    'Kyoki.OAuth2'
+        '@controller': 'Token'
+        '@format':     'html'
+        '@action':     'token'
