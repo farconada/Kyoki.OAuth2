@@ -9,6 +9,11 @@ TYPO3:
     security:
       authentication:
         providers:
+          OAuthClientProvider:
+            provider: Kyoki\OAuth2\Security\Authentication\Provider\ClientIdSecretProvider
+            token: Kyoki\OAuth2\Security\Authentication\Token\ClientIdSecret
+            requestPatterns:
+              controllerObjectName: Kyoki\OAuth2\Controller\TokenController
           OAuthClientProviderHttpBasic:
             provider: Kyoki\OAuth2\Security\Authentication\Provider\ClientIdSecretProvider
             token: Kyoki\OAuth2\Security\Authentication\Token\ClientIdSecretHttpBasic
@@ -17,8 +22,11 @@ TYPO3:
             entryPoint: HttpBasic
             entryPointOptions:
               realm: 'OAuth2 Client Authentication'
-          OAuthClientProvider:
-            provider: Kyoki\OAuth2\Security\Authentication\Provider\ClientIdSecretProvider
-            token: Kyoki\OAuth2\Security\Authentication\Token\ClientIdSecret
-            requestPatterns:
-              controllerObjectName: Kyoki\OAuth2\Controller\TokenController
+#          DefaultProvider:
+#            provider: PersistedUsernamePasswordProvider
+#            entryPoint: 'WebRedirect'
+#            requestPatterns:
+#              controllerObjectName: (?!Kyoki\OAuth2\Controller\TokenController)
+#              controllerObjectName: .*
+#            entryPointOptions:
+#              uri: 'login'

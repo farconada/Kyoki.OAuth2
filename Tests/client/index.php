@@ -20,10 +20,10 @@ if (!isset($_GET['code']))
 else
 {
     $params = array('code' => $_GET['code'], 'redirect_uri' => REDIRECT_URI);
-    echo 'code: ' . $params['code'];
+    echo 'code: ' . $params['code'] . " <br />\n";
     $response = $client->getAccessToken(TOKEN_ENDPOINT, 'authorization_code', $params);
-    parse_str($response['result'], $info);
-    echo 'access_token: ' . $info['access_token'];
+    $info = $response['result'];
+    echo 'access_token: ' . $info['access_token'] . " <br />\n";
     $client->setAccessToken($info['access_token']);
     // $response = $client->fetch('https://graph.facebook.com/me');
     //var_dump($response, $response['result']);
