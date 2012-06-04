@@ -9,10 +9,16 @@ TYPO3:
     security:
       authentication:
         providers:
-          OAuthClientProvider:
+          OAuthClientProviderHttpBasic:
             provider: Kyoki\OAuth2\Security\Authentication\Provider\ClientIdSecretProvider
+            token: Kyoki\OAuth2\Security\Authentication\Token\ClientIdSecretHttpBasic
             requestPatterns:
               controllerObjectName: Kyoki\OAuth2\Controller\TokenController
             entryPoint: HttpBasic
             entryPointOptions:
               realm: 'OAuth2 Client Authentication'
+          OAuthClientProvider:
+            provider: Kyoki\OAuth2\Security\Authentication\Provider\ClientIdSecretProvider
+            token: Kyoki\OAuth2\Security\Authentication\Token\ClientIdSecret
+            requestPatterns:
+              controllerObjectName: Kyoki\OAuth2\Controller\TokenController
