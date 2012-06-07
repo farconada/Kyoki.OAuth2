@@ -22,6 +22,14 @@ TYPO3:
             entryPoint: HttpBasic
             entryPointOptions:
               realm: 'OAuth2 Client Authentication'
+#          OAuthTokenProvider:
+#            provider: Kyoki\OAuth2\Security\Authentication\Provider\AccessTokenProvider
+#            token: Kyoki\OAuth2\Security\Authentication\Token\AccessTokenHttpBasic
+#            requestPatterns:
+#              controllerObjectName: My\Package\Controller\ResourceController
+#            entryPoint: HttpBasic
+#            entryPointOptions:
+#              realm: 'OAuth2 Access Token Authentication'
 #          DefaultProvider:
 #            provider: PersistedUsernamePasswordProvider
 #            entryPoint: 'WebRedirect'
