@@ -25,6 +25,6 @@ else
     $info = $response['result'];
     echo 'access_token: ' . $info['access_token'] . " <br />\n";
     $client->setAccessToken($info['access_token']);
-    // $response = $client->fetch('https://graph.facebook.com/me');
-    //var_dump($response, $response['result']);
+    $response = $client->fetch('http://flow3.localhost/resource');
+    var_dump($response, $response['result']);
 }
