@@ -7,6 +7,8 @@ Kyoki:
 TYPO3:
   FLOW3:
     security:
+      authorization:
+          accessDecisionVoters: [TYPO3\FLOW3\Security\Authorization\Voter\Policy, Kyoki\OAuth2\Security\Authorization\Voter\Policy]
       authentication:
         providers:
           OAuthClientProvider:

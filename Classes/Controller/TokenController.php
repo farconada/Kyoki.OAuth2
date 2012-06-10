@@ -26,6 +26,12 @@ class TokenController extends OAuthAbstractController
      */
     protected $oauthTokenRepository;
 
+    /**
+     * @var \Kyoki\OAuth2\Domain\Repository\OAuthCodeRepository
+     * @FLOW3\Inject
+     */
+    protected $oauthCodeRepository;
+
 
     /**
      * Token endpoint
@@ -43,7 +49,9 @@ class TokenController extends OAuthAbstractController
 
             }
         }
+        $this->oauthCodeRepository->removeCodeTokens($code);
         $token = new OAuthToken($code,3600,'Bearer');
+        $token->setOauthCode($code);
         $this->oauthTokenRepository->add($token);
         return json_encode(array(
             'access_token'  => $token->getAccessToken(),

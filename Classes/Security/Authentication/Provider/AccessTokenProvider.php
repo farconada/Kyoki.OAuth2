@@ -21,7 +21,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class AccessTokenProvider extends \TYPO3\FLOW3\Security\Authentication\Provider\AbstractProvider {
 
 	/**
-	 * @var \Kyoki\OAuth2\Domain\Repository\OAuthCodeRepository
+	 * @var \Kyoki\OAuth2\Domain\Repository\OAuthTokenRepository
 	 * @FLOW3\Inject
 	 */
 	protected $oauthTokenRepository;
@@ -45,7 +45,7 @@ class AccessTokenProvider extends \TYPO3\FLOW3\Security\Authentication\Provider\
 	 * @FLOW3\Session(autoStart=true)
 	 */
 	public function authenticate(\TYPO3\FLOW3\Security\Authentication\TokenInterface $authenticationToken) {
-		if (!($authenticationToken instanceof \Kyoki\OAuth2\Security\Authentication\Token\ClientIdSecret)) {
+		if (!($authenticationToken instanceof \Kyoki\OAuth2\Security\Authentication\Token\AccessTokenHttpBasic)) {
 			throw new \TYPO3\FLOW3\Security\Exception\UnsupportedAuthenticationTokenException('This provider cannot authenticate the given token.', 1217339840);
 		}
 
@@ -56,20 +56,31 @@ class AccessTokenProvider extends \TYPO3\FLOW3\Security\Authentication\Provider\
 			/**
 			 * @var $oauthToken \Kyoki\OAuth2\Domain\Model\OAuthToken;
 			 */
-			$oauthToken = $this->oauthTokenRepositoryRepository->findByIdentifier($credentials['access_token']);
+			$oauthToken = $this->oauthTokenRepository->findByIdentifier($credentials['access_token']);
+            file_put_contents('/tmp/dump.txt',"Looking for token ".$credentials['access_token']."\n",FILE_APPEND);
 		}
 
 		if (is_object($oauthToken)) {
-			//TODO verificar scope
+            file_put_contents('/tmp/dump.txt',"I have a Token object\n",FILE_APPEND);
 			$now = new \DateTime();
 			if (($oauthToken->getCreationDate()->getTimestamp()+$oauthToken->getExpiresIn()) < $now->getTimestamp()) {
+                file_put_contents('/tmp/dump.txt',"Token expired\n",FILE_APPEND);
 				$authenticationToken->setAuthenticationStatus(\TYPO3\FLOW3\Security\Authentication\TokenInterface::WRONG_CREDENTIALS);
-			}
-			$authenticationToken->setAuthenticationStatus(\TYPO3\FLOW3\Security\Authentication\TokenInterface::AUTHENTICATION_SUCCESSFUL);
-			//$authenticationToken->setAccount($oauthCode->getParty()->getAccounts()->first());
+			} else {
+                /**
+                 * @var $account \TYPO3\FLOW3\Security\Account
+                 */
+                $account = $oauthToken->getOauthCode()->getParty()->getAccounts()->first();
+                $authenticationToken->setAuthenticationStatus(\TYPO3\FLOW3\Security\Authentication\TokenInterface::AUTHENTICATION_SUCCESSFUL);
+                $authenticationToken->setOauthToken($oauthToken);
+                $authenticationToken->setAccount($account);
+                file_put_contents('/tmp/dump.txt',"Authenticated as ".$account->getParty()->getNombre()."\n",FILE_APPEND);
+            }
+
 		} elseif ($authenticationToken->getAuthenticationStatus() !== \TYPO3\FLOW3\Security\Authentication\TokenInterface::AUTHENTICATION_SUCCESSFUL) {
 			$authenticationToken->setAuthenticationStatus(\TYPO3\FLOW3\Security\Authentication\TokenInterface::NO_CREDENTIALS_GIVEN);
 		}
+
 	}
 
 }

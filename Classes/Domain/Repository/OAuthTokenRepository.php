@@ -9,6 +9,7 @@ namespace Kyoki\OAuth2\Domain\Repository;
  */
 
 use TYPO3\FLOW3\Annotations as FLOW3;
+use Kyoki\OAuth2\Domain\Model\OAuthCode;
 /**
  * Repository for parties
  *
@@ -20,5 +21,11 @@ class OAuthTokenRepository extends \TYPO3\FLOW3\Persistence\Repository {
         $query = $query->matching($query->equals('refreshToken', $refresh_token));
         return $query->execute();
 
+    }
+
+    public function findTokensByCode(OAuthCode $oauthCode) {
+        $query = $this->createQuery();
+        $query = $query->matching($query->equals('oauthCode', $oauthCode));
+        return $query->execute();
     }
 }

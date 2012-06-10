@@ -54,6 +54,12 @@ class OAuthCode
 	*/
     protected $party;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection<\Kyoki\OAuth2\Domain\Model\OAuthToken>
+     * @ORM\OneToMany(mappedBy="oauthCode")
+     */
+    protected $tokens;
+
 
 	public function __construct(OAuthClient $OAuthClient, AbstractParty $party, OAuthScope $scope) {
 		$secret = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
@@ -129,5 +135,14 @@ class OAuthCode
 	public function getEnabled() {
 		return $this->enabled;
 	}
+
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTokens()
+    {
+        return $this->tokens;
+    }
 
 }

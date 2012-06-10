@@ -1,5 +1,6 @@
 <?php
 namespace Kyoki\OAuth2\Security\Authentication\Token;
+use TYPO3\FLOW3\Annotations as FLOW3;
 
 /*                                                                        *
  * This script belongs to the FLOW3 framework.                            *
@@ -17,6 +18,18 @@ namespace Kyoki\OAuth2\Security\Authentication\Token;
  */
 class AccessTokenHttpBasic extends ClientIdSecret {
 
+    /**
+     * The username/password credentials
+     * @var array
+     * @FLOW3\Transient
+     */
+    protected $credentials = array('access_token' => '');
+
+    /**
+     * @var $oauthToken \Kyoki\OAuth2\Domain\Model\OAuthToken
+     */
+    protected $oauthToken = NULL;
+
 	/**
 	 * Updates the username and password credentials from the HTTP authorization header.
 	 * Sets the authentication status to AUTHENTICATION_NEEDED, if the header has been
@@ -26,15 +39,47 @@ class AccessTokenHttpBasic extends ClientIdSecret {
 	 * @return void
 	 */
 	public function updateCredentials(\TYPO3\FLOW3\Mvc\ActionRequest $actionRequest) {
-		$authorizationHeader = $actionRequest->getHttpRequest()->getHeaders()->get('Authorization');
+        $headers = array();
+        if (function_exists('apache_request_headers')) {
+            $headers = apache_request_headers();
+        }
+        if (!isset($headers['Authorization'])) {
+            $headers['Authorization'] = NULL;
+        }
+		$authorizationHeader = $headers['Authorization'];
 		if (substr($authorizationHeader, 0, 5) === 'OAuth') {
-			$credentials = base64_decode(substr($authorizationHeader, 6));
-			$this->credentials['access_token'] = trim($credentials);
+			$this->credentials['access_token'] = trim(substr($authorizationHeader, 6));
 			$this->setAuthenticationStatus(self::AUTHENTICATION_NEEDED);
 		} else {
 			$this->credentials = array('access_token' => NULL);
 			$this->authenticationStatus = self::NO_CREDENTIALS_GIVEN;
 		}
 	}
+
+    /**
+     * Returns a string representation of the token for logging purposes.
+     *
+     * @return string The access token credential
+     */
+    public function  __toString() {
+        return 'Access Token: "' . $this->credentials['access_token'] . '"';
+    }
+
+    /**
+     * @param \Kyoki\OAuth2\Domain\Model\OAuthToken $oauthToken
+     */
+    public function setOauthToken($oauthToken)
+    {
+        $this->oauthToken = $oauthToken;
+    }
+
+    /**
+     * @return \Kyoki\OAuth2\Domain\Model\OAuthToken
+     */
+    public function getOauthToken()
+    {
+        return $this->oauthToken;
+    }
+
 }
 ?>

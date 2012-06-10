@@ -19,6 +19,8 @@ use Kyoki\OAuth2\Domain\Model\OAuthCode;
 class OAuthToken
 {
     /**
+     * @FLOW3\Identity
+     * @ORM\Id
      * @var string
      * @FLOW3\Validate(type="NotEmpty")
      */
