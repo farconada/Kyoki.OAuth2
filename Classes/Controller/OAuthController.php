@@ -26,64 +26,70 @@ use Kyoki\OAuth2\Controller\OAuthAbstractController;
  */
 class OAuthController extends OAuthAbstractController
 {
-	/**
-	 * @var \TYPO3\FLOW3\Security\Context
-	 * @FLOW3\Inject
-	 */
-	protected $securityContext;
+    /**
+     * @var \TYPO3\FLOW3\Security\Context
+     * @FLOW3\Inject
+     */
+    protected $securityContext;
 
 
-	/**
-	 * @var \Kyoki\OAuth2\Domain\Repository\OAuthCodeRepository
-	 * @FLOW3\Inject
-	 */
-	protected $oauthCodeRepository;
+    /**
+     * @var \Kyoki\OAuth2\Domain\Repository\OAuthCodeRepository
+     * @FLOW3\Inject
+     */
+    protected $oauthCodeRepository;
 
-	/**
-	 * Authenticate and request permission
-	 *
+    /**
+     * Authenticate and request permission
+     *
      * @FLOW3\SkipCsrfProtection
-	 * @param string $response_type
-	 * @param Kyoki\OAuth2\Domain\Model\OAuthClient $client_id
-	 * @param string $redirect_uri
-	 * @param Kyoki\OAuth2\Domain\Model\OAuthScope $scope
-	 */
-	public function authorizeAction($response_type,OAuthClient $client_id, $redirect_uri, OAuthScope $scope) {
-		if (!preg_match('/' . urlencode($client_id->getRedirectUri()) . '/', urlencode($redirect_uri))) {
-			throw new OAuthException('La URL de redireccion no concuerda con las autorizada',1337249067);
-		}
-		$oauthCode = new OAuthCode($client_id,$this->securityContext->getParty(),$scope);
+     * @param string $response_type
+     * @param Kyoki\OAuth2\Domain\Model\OAuthClient $client_id persistence identifier
+     * @param string $redirect_uri
+     * @param Kyoki\OAuth2\Domain\Model\OAuthScope $scope persistence identifier
+     */
+    public function authorizeAction($response_type, OAuthClient $client_id, $redirect_uri, OAuthScope $scope)
+    {
+        if (!preg_match('/' . urlencode($client_id->getRedirectUri()) . '/', urlencode($redirect_uri)))
+        {
+            throw new OAuthException('La URL de redireccion no concuerda con las autorizada', 1337249067);
+        }
+        $oauthCode = new OAuthCode($client_id, $this->securityContext->getParty(), $scope);
         $oauthCode->setRedirectUri($redirect_uri);
-        if ($response_type == 'code' ) {
+        if ($response_type == 'code')
+        {
             $this->oauthCodeRepository->add($oauthCode);
             $this->persistenceManager->persistAll();
             $this->view->assign('oauthCode', $oauthCode);
             $this->view->assign('oauthScope', $scope);
-        } else {
+        } else
+        {
             throw new OAuthException('Response Type not implemented', 1337249132);
         }
-	}
+    }
 
-	/**
-	 * Access granted, return a OAuth Code
-	 *
-	 * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $oauthCode
-	 */
-	public function grantAction(OAuthCode $oauthCode){
-		$oauthCode->setEnabled(TRUE);
-		$this->oauthCodeRepository->update($oauthCode);
-		$this->redirectToUri($oauthCode->getRedirectUri() . '?' . http_build_query(array('code' => $oauthCode->getCode()), null,'&'));
-	}
+    /**
+     * Access granted, return an OAuth Code
+     *
+     * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $oauthCode
+     */
+    public function grantAction(OAuthCode $oauthCode)
+    {
+        $oauthCode->setEnabled(TRUE);
+        $this->oauthCodeRepository->update($oauthCode);
+        $this->redirectToUri($oauthCode->getRedirectUri() . '?' . http_build_query(array('code' => $oauthCode->getCode()), null, '&'));
+    }
 
-	/**
-	 * Access denied
-	 *
-	 * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $oauthCode
-	 */
-	public function denyAction(OAuthCode $oauthCode){
-		$this->redirectToUri($oauthCode->getRedirectUri() . '?' . http_build_query(array('error' => 'access_denied'), null,'&'));
-		$this->oauthCodeRepository->remove($oauthCode);
-	}
+    /**
+     * Access denied
+     *
+     * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $oauthCode
+     */
+    public function denyAction(OAuthCode $oauthCode)
+    {
+        $this->redirectToUri($oauthCode->getRedirectUri() . '?' . http_build_query(array('error' => 'access_denied'), null, '&'));
+        $this->oauthCodeRepository->remove($oauthCode);
+    }
 
 
 }

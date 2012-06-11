@@ -16,7 +16,8 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * An authentication token used for simple username and password authentication via HTTP Basic Auth.
  *
  */
-class AccessTokenHttpBasic extends ClientIdSecret {
+class AccessTokenHttpBasic extends ClientIdSecret
+{
 
     /**
      * The username/password credentials
@@ -30,38 +31,44 @@ class AccessTokenHttpBasic extends ClientIdSecret {
      */
     protected $oauthToken = NULL;
 
-	/**
-	 * Updates the username and password credentials from the HTTP authorization header.
-	 * Sets the authentication status to AUTHENTICATION_NEEDED, if the header has been
-	 * sent, to NO_CREDENTIALS_GIVEN if no authorization header was there.
-	 *
-	 * @param \TYPO3\FLOW3\Mvc\ActionRequest $actionRequest The current action request instance
-	 * @return void
-	 */
-	public function updateCredentials(\TYPO3\FLOW3\Mvc\ActionRequest $actionRequest) {
+    /**
+     * Updates the username and password credentials from the HTTP authorization header.
+     * Sets the authentication status to AUTHENTICATION_NEEDED, if the header has been
+     * sent, to NO_CREDENTIALS_GIVEN if no authorization header was there.
+     *
+     * @param \TYPO3\FLOW3\Mvc\ActionRequest $actionRequest The current action request instance
+     * @return void
+     */
+    public function updateCredentials(\TYPO3\FLOW3\Mvc\ActionRequest $actionRequest)
+    {
         $headers = array();
-        if (function_exists('apache_request_headers')) {
+        if (function_exists('apache_request_headers'))
+        {
             $headers = apache_request_headers();
         }
-        if (!isset($headers['Authorization'])) {
+        if (!isset($headers['Authorization']))
+        {
             $headers['Authorization'] = NULL;
         }
-		$authorizationHeader = $headers['Authorization'];
-		if (substr($authorizationHeader, 0, 5) === 'OAuth') {
-			$this->credentials['access_token'] = trim(substr($authorizationHeader, 6));
-			$this->setAuthenticationStatus(self::AUTHENTICATION_NEEDED);
-		} else {
-			$this->credentials = array('access_token' => NULL);
-			$this->authenticationStatus = self::NO_CREDENTIALS_GIVEN;
-		}
-	}
+        $authorizationHeader = $headers['Authorization'];
+        if (substr($authorizationHeader, 0, 5) === 'OAuth')
+        {
+            $this->credentials['access_token'] = trim(substr($authorizationHeader, 6));
+            $this->setAuthenticationStatus(self::AUTHENTICATION_NEEDED);
+        } else
+        {
+            $this->credentials = array('access_token' => NULL);
+            $this->authenticationStatus = self::NO_CREDENTIALS_GIVEN;
+        }
+    }
 
     /**
      * Returns a string representation of the token for logging purposes.
      *
      * @return string The access token credential
      */
-    public function  __toString() {
+    public function  __toString()
+    {
         return 'Access Token: "' . $this->credentials['access_token'] . '"';
     }
 
@@ -82,4 +89,5 @@ class AccessTokenHttpBasic extends ClientIdSecret {
     }
 
 }
+
 ?>

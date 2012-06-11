@@ -32,31 +32,35 @@ class OAuthScope
      */
     protected $description;
 
-	public function __construct($id, $description='') {
-		$this->id =$id ;
-		$this->setDescription($description);
-	}
+    public function __construct($id, $description = '')
+    {
+        $this->id = $id;
+        $this->setDescription($description);
+    }
 
-	/**
-	 * @param string $description
-	 */
-	public function setDescription($description) {
-		$this->description = $description;
-	}
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getDescription() {
-		return $this->description;
-	}
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
 
 
-	/**
-	 * @return string
-	 */
-	public function getId() {
-		return $this->id;
-	}
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
 }

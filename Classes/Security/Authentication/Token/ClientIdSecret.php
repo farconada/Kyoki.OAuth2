@@ -16,52 +16,58 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 /**
  * An authentication token used for simple username and password authentication.
  */
-class ClientIdSecret extends \TYPO3\FLOW3\Security\Authentication\Token\AbstractToken {
+class ClientIdSecret extends \TYPO3\FLOW3\Security\Authentication\Token\AbstractToken
+{
 
-	/**
-	 * The username/password credentials
-	 * @var array
-	 * @FLOW3\Transient
-	 */
-	protected $credentials = array('client_id' => '', 'client_secret' => '');
+    /**
+     * The username/password credentials
+     * @var array
+     * @FLOW3\Transient
+     */
+    protected $credentials = array('client_id' => '', 'client_secret' => '');
 
-	/**
-	 * Updates the username and password credentials from the POST vars, if the POST parameters
-	 * are available. Sets the authentication status to REAUTHENTICATION_NEEDED, if credentials have been sent.
-	 *
-	 * Note: You need to send the username and password in these two POST parameters:
-	 *       __authentication[TYPO3][FLOW3][Security][Authentication][Token][UsernamePassword][username]
-	 *   and __authentication[TYPO3][FLOW3][Security][Authentication][Token][UsernamePassword][password]
-	 *
-	 * @param \TYPO3\FLOW3\Mvc\ActionRequest $actionRequest The current action request
-	 * @return void
-	 */
-	public function updateCredentials(\TYPO3\FLOW3\Mvc\ActionRequest $actionRequest) {
-		$httpRequest = $actionRequest->getHttpRequest();
-		if ($httpRequest->getMethod() !== 'POST') {
-			return;
-		}
+    /**
+     * Updates the username and password credentials from the POST vars, if the POST parameters
+     * are available. Sets the authentication status to REAUTHENTICATION_NEEDED, if credentials have been sent.
+     *
+     * Note: You need to send the username and password in these two POST parameters:
+     *       __authentication[TYPO3][FLOW3][Security][Authentication][Token][UsernamePassword][username]
+     *   and __authentication[TYPO3][FLOW3][Security][Authentication][Token][UsernamePassword][password]
+     *
+     * @param \TYPO3\FLOW3\Mvc\ActionRequest $actionRequest The current action request
+     * @return void
+     */
+    public function updateCredentials(\TYPO3\FLOW3\Mvc\ActionRequest $actionRequest)
+    {
+        $httpRequest = $actionRequest->getHttpRequest();
+        if ($httpRequest->getMethod() !== 'POST')
+        {
+            return;
+        }
 
-		$arguments = $actionRequest->getArguments();
-		$username = \TYPO3\FLOW3\Reflection\ObjectAccess::getPropertyPath($arguments, 'client_id');
-		$password = \TYPO3\FLOW3\Reflection\ObjectAccess::getPropertyPath($arguments, 'client_secret');
+        $arguments = $actionRequest->getArguments();
+        $username = \TYPO3\FLOW3\Reflection\ObjectAccess::getPropertyPath($arguments, 'client_id');
+        $password = \TYPO3\FLOW3\Reflection\ObjectAccess::getPropertyPath($arguments, 'client_secret');
 
-		if (!empty($username) && !empty($password)) {
-			$this->credentials['client_id'] = $username;
-			$this->credentials['client_secret'] = $password;
+        if (!empty($username) && !empty($password))
+        {
+            $this->credentials['client_id'] = $username;
+            $this->credentials['client_secret'] = $password;
 
-			$this->setAuthenticationStatus(self::AUTHENTICATION_NEEDED);
-		}
-	}
+            $this->setAuthenticationStatus(self::AUTHENTICATION_NEEDED);
+        }
+    }
 
-	/**
-	 * Returns a string representation of the token for logging purposes.
-	 *
-	 * @return string The username credential
-	 */
-	public function  __toString() {
-		return 'Client Id: "' . $this->credentials['client_id'] . '"';
-	}
+    /**
+     * Returns a string representation of the token for logging purposes.
+     *
+     * @return string The username credential
+     */
+    public function  __toString()
+    {
+        return 'Client Id: "' . $this->credentials['client_id'] . '"';
+    }
 
 }
+
 ?>

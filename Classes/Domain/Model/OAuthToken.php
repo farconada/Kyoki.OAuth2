@@ -28,27 +28,27 @@ class OAuthToken
      */
     protected $accessToken;
 
-	/**
-	 * @var string
-	 * @FLOW3\Validate(type="NotEmpty")
-	 */
-	protected $refreshToken;
+    /**
+     * @var string
+     * @FLOW3\Validate(type="NotEmpty")
+     */
+    protected $refreshToken;
 
     /**
      * @var \DateTime
      */
     protected $creationDate;
 
-	/**
-	 * @var string
-	 */
-	protected $tokenType;
+    /**
+     * @var string
+     */
+    protected $tokenType;
 
-	/**
+    /**
      * Seconds
-	 * @var int
-	 */
-	protected $expiresIn;
+     * @var int
+     */
+    protected $expiresIn;
 
     /**
      * @var \Kyoki\OAuth2\Domain\Model\OAuthCode
@@ -57,7 +57,8 @@ class OAuthToken
     protected $oauthCode;
 
 
-    public function __construct(OAuthCode $OAuthCode, $expiresIn, $tokenType) {
+    public function __construct(OAuthCode $OAuthCode, $expiresIn, $tokenType)
+    {
         $access = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
         $this->setAccessToken($access);
         $refresh = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));

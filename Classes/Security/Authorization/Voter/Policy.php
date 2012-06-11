@@ -18,36 +18,41 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * @FLOW3\Scope("singleton")
  */
-class Policy implements \TYPO3\FLOW3\Security\Authorization\AccessDecisionVoterInterface {
+class Policy implements \TYPO3\FLOW3\Security\Authorization\AccessDecisionVoterInterface
+{
 
-	/**
-	 * The policy service
-	 * @var \TYPO3\FLOW3\Security\Policy\PolicyService
-	 */
-	protected $policyService;
+    /**
+     * The policy service
+     * @var \TYPO3\FLOW3\Security\Policy\PolicyService
+     */
+    protected $policyService;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param \TYPO3\FLOW3\Security\Policy\PolicyService $policyService The policy service
-	 */
-	public function __construct(\TYPO3\FLOW3\Security\Policy\PolicyService $policyService) {
-		$this->policyService = $policyService;
-	}
+    /**
+     * Constructor.
+     *
+     * @param \TYPO3\FLOW3\Security\Policy\PolicyService $policyService The policy service
+     */
+    public function __construct(\TYPO3\FLOW3\Security\Policy\PolicyService $policyService)
+    {
+        $this->policyService = $policyService;
+    }
 
-	/**
-	 * This is the default Policy voter, it votes for the access privilege for the given join point
-	 *
-	 * @param \TYPO3\FLOW3\Security\Context $securityContext The current securit context
-	 * @param \TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint The joinpoint to vote for
-	 * @return integer One of: VOTE_GRANT, VOTE_ABSTAIN, VOTE_DENY
-	 */
-	public function voteForJoinPoint(\TYPO3\FLOW3\Security\Context $securityContext, \TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint) {
-		$accessGrants = 0;
-		$accessDenies = 0;
+    /**
+     * This is the default Policy voter, it votes for the access privilege for the given join point
+     *
+     * @param \TYPO3\FLOW3\Security\Context $securityContext The current securit context
+     * @param \TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint The joinpoint to vote for
+     * @return integer One of: VOTE_GRANT, VOTE_ABSTAIN, VOTE_DENY
+     */
+    public function voteForJoinPoint(\TYPO3\FLOW3\Security\Context $securityContext, \TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint)
+    {
+        $accessGrants = 0;
+        $accessDenies = 0;
         $tokens = $securityContext->getAuthenticationTokens();
-        foreach ($tokens as $token) {
-            if ($token instanceof \Kyoki\OAuth2\Security\Authentication\Token\AccessTokenHttpBasic) {
+        foreach ($tokens as $token)
+        {
+            if ($token instanceof \Kyoki\OAuth2\Security\Authentication\Token\AccessTokenHttpBasic)
+            {
                 break;
             }
             return self::VOTE_ABSTAIN;
@@ -56,40 +61,48 @@ class Policy implements \TYPO3\FLOW3\Security\Authorization\AccessDecisionVoterI
          * @var $token \Kyoki\OAuth2\Security\Authentication\Token\AccessTokenHttpBasic
          */
         $scope = $token->getOauthToken()->getOauthCode()->getOauthScope();
-        try {
+        try
+        {
             $privileges = $this->policyService->getPrivilegesForJoinPoint(new \TYPO3\FLOW3\Security\Policy\Role($scope->getId()), $joinPoint);
-        } catch (\TYPO3\FLOW3\Security\Exception\NoEntryInPolicyException $e) {
+        } catch (\TYPO3\FLOW3\Security\Exception\NoEntryInPolicyException $e)
+        {
             return self::VOTE_DENY;
         }
 
-        foreach ($privileges as $privilege) {
-            if ($privilege === \TYPO3\FLOW3\Security\Policy\PolicyService::PRIVILEGE_GRANT) {
+        foreach ($privileges as $privilege)
+        {
+            if ($privilege === \TYPO3\FLOW3\Security\Policy\PolicyService::PRIVILEGE_GRANT)
+            {
                 $accessGrants++;
-            } elseif ($privilege === \TYPO3\FLOW3\Security\Policy\PolicyService::PRIVILEGE_DENY) {
+            } elseif ($privilege === \TYPO3\FLOW3\Security\Policy\PolicyService::PRIVILEGE_DENY)
+            {
                 $accessDenies++;
             }
         }
 
-		if ($accessDenies > 0) {
-			return self::VOTE_DENY;
-		}
-		if ($accessGrants > 0) {
-			return self::VOTE_ABSTAIN;
-		}
+        if ($accessDenies > 0)
+        {
+            return self::VOTE_DENY;
+        }
+        if ($accessGrants > 0)
+        {
+            return self::VOTE_ABSTAIN;
+        }
 
-		return self::VOTE_DENY;
-	}
+        return self::VOTE_DENY;
+    }
 
-	/**
-	 * This is the default Policy voter, it votes for the access privilege for the given resource
-	 *
-	 * @param \TYPO3\FLOW3\Security\Context $securityContext The current securit context
-	 * @param string $resource The resource to vote for
-	 * @return integer One of: VOTE_GRANT, VOTE_ABSTAIN, VOTE_DENY
-	 */
-	public function voteForResource(\TYPO3\FLOW3\Security\Context $securityContext, $resource) {
-		return self::VOTE_ABSTAIN;
-	}
+    /**
+     * This is the default Policy voter, it votes for the access privilege for the given resource
+     *
+     * @param \TYPO3\FLOW3\Security\Context $securityContext The current securit context
+     * @param string $resource The resource to vote for
+     * @return integer One of: VOTE_GRANT, VOTE_ABSTAIN, VOTE_DENY
+     */
+    public function voteForResource(\TYPO3\FLOW3\Security\Context $securityContext, $resource)
+    {
+        return self::VOTE_ABSTAIN;
+    }
 }
 
 ?>

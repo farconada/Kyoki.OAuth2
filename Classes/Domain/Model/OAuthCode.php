@@ -14,6 +14,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 use Kyoki\OAuth2\Domain\Model\OAuthClient;
 use Kyoki\OAuth2\Domain\Model\OAuthScope;
 use TYPO3\Party\Domain\Model\AbstractParty;
+
 /**
  * An OAuth consumer
  *
@@ -34,10 +35,10 @@ class OAuthCode
      */
     protected $code;
 
-	/**
-	 * @var boolean
-	 */
-	protected $enabled;
+    /**
+     * @var boolean
+     */
+    protected $enabled;
 
     /**
      * @var \Kyoki\OAuth2\Domain\Model\OAuthScope
@@ -45,15 +46,15 @@ class OAuthCode
      */
     protected $oauthScope;
 
-	/**
-	 * @var string
-	 */
-	protected $redirectUri;
+    /**
+     * @var string
+     */
+    protected $redirectUri;
 
-	/**
-	* @var \TYPO3\Party\Domain\Model\AbstractParty
-	* @ORM\ManyToOne
-	*/
+    /**
+     * @var \TYPO3\Party\Domain\Model\AbstractParty
+     * @ORM\ManyToOne
+     */
     protected $party;
 
     /**
@@ -63,80 +64,92 @@ class OAuthCode
     protected $tokens;
 
 
-	public function __construct(OAuthClient $OAuthClient, AbstractParty $party, OAuthScope $scope) {
-		$secret = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
-		$this->code = $secret ;
-		$this->enabled = FALSE;
-		$this->setOauthClient($OAuthClient);
-		$this->setParty($party);
-		$this->setOauthScope($scope);
-	}
+    public function __construct(OAuthClient $OAuthClient, AbstractParty $party, OAuthScope $scope)
+    {
+        $secret = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
+        $this->code = $secret;
+        $this->enabled = FALSE;
+        $this->setOauthClient($OAuthClient);
+        $this->setParty($party);
+        $this->setOauthScope($scope);
+    }
 
 
-	/**
-	 * @return string
-	 */
-	public function getCode() {
-		return $this->code;
-	}
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
 
-	public function setOauthClient($oauthClient) {
-		$this->oauthClient = $oauthClient;
-	}
+    public function setOauthClient($oauthClient)
+    {
+        $this->oauthClient = $oauthClient;
+    }
 
-	public function getOauthClient() {
-		return $this->oauthClient;
-	}
+    public function getOauthClient()
+    {
+        return $this->oauthClient;
+    }
 
-	protected function setOauthScope($oauthScope) {
-		$this->oauthScope = $oauthScope;
-	}
+    protected function setOauthScope($oauthScope)
+    {
+        $this->oauthScope = $oauthScope;
+    }
 
-	public function getOauthScope() {
-		return $this->oauthScope;
-	}
+    public function getOauthScope()
+    {
+        return $this->oauthScope;
+    }
 
-	/**
-	 * @param \TYPO3\Party\Domain\Model\AbstractParty $party
-	 */
-	protected  function setParty($party) {
-		$this->party = $party;
-	}
+    /**
+     * @param \TYPO3\Party\Domain\Model\AbstractParty $party
+     */
+    protected function setParty($party)
+    {
+        $this->party = $party;
+    }
 
-	/**
-	 * @return \TYPO3\Party\Domain\Model\AbstractParty
-	 */
-	public function getParty() {
-		return $this->party;
-	}
+    /**
+     * @return \TYPO3\Party\Domain\Model\AbstractParty
+     */
+    public function getParty()
+    {
+        return $this->party;
+    }
 
-	/**
-	 * @param string $redirectUri
-	 */
-	public function setRedirectUri($redirectUri) {
-		$this->redirectUri = $redirectUri;
-	}
+    /**
+     * @param string $redirectUri
+     */
+    public function setRedirectUri($redirectUri)
+    {
+        $this->redirectUri = $redirectUri;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getRedirectUri() {
-		return $this->redirectUri;
-	}
+    /**
+     * @return string
+     */
+    public function getRedirectUri()
+    {
+        return $this->redirectUri;
+    }
 
-	/**
-	 * @param boolean $enabled
-	 */
-	public function setEnabled($enabled) {
-		$this->enabled = $enabled;
-	}
+    /**
+     * @param boolean $enabled
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    }
 
-	/**
-	 * @return boolean
-	 */
-	public function getEnabled() {
-		return $this->enabled;
-	}
+    /**
+     * @return boolean
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
 
 
     /**

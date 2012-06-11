@@ -41,79 +41,89 @@ class OAuthClient
      */
     protected $description;
 
-	/**
-	 * @var \TYPO3\Party\Domain\Model\AbstractParty
-	 * @ORM\ManyToOne
-	 */
-	protected $party;
+    /**
+     * @var \TYPO3\Party\Domain\Model\AbstractParty
+     * @ORM\ManyToOne
+     */
+    protected $party;
 
 
-	public function __construct($description, $redirectUri) {
-		$clientId =  sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
-		$secret = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
-		$this->setSecret($secret);
-		$this->clientId = $clientId;
-		$this->setDescription($description);
-		$this->setRedirectUri($redirectUri);
-	}
+    public function __construct($description, $redirectUri)
+    {
+        $clientId = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
+        $secret = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
+        $this->setSecret($secret);
+        $this->clientId = $clientId;
+        $this->setDescription($description);
+        $this->setRedirectUri($redirectUri);
+    }
 
 
-	/**
-	 * @return string
-	 */
-	public function getClientId() {
-		return $this->clientId;
-	}
+    /**
+     * @return string
+     */
+    public function getClientId()
+    {
+        return $this->clientId;
+    }
 
-	/**
-	 * @param string $description
-	 */
-	public function setDescription($description) {
-		$this->description = $description;
-	}
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getDescription() {
-		return $this->description;
-	}
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
 
-	public function setParty($party) {
-		$this->party = $party;
-	}
+    public function setParty($party)
+    {
+        $this->party = $party;
+    }
 
-	public function getParty() {
-		return $this->party;
-	}
+    public function getParty()
+    {
+        return $this->party;
+    }
 
-	/**
-	 * @param string $redirectUri
-	 */
-	public function setRedirectUri($redirectUri) {
-		$this->redirectUri = $redirectUri;
-	}
+    /**
+     * @param string $redirectUri
+     */
+    public function setRedirectUri($redirectUri)
+    {
+        $this->redirectUri = $redirectUri;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getRedirectUri() {
-		return $this->redirectUri;
-	}
+    /**
+     * @return string
+     */
+    public function getRedirectUri()
+    {
+        return $this->redirectUri;
+    }
 
-	/**
-	 * @param string $secret
-	 */
-	public function setSecret($secret) {
-		$this->secret = $secret;
-	}
+    /**
+     * @param string $secret
+     */
+    public function setSecret($secret)
+    {
+        $this->secret = $secret;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getSecret() {
-		return $this->secret;
-	}
+    /**
+     * @return string
+     */
+    public function getSecret()
+    {
+        return $this->secret;
+    }
 
 
 }

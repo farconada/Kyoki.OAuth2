@@ -14,67 +14,82 @@ use Kyoki\OAuth2\Domain\Model\OAuthClient;
 use Kyoki\OAuth2\Domain\Model\OAuthScope;
 
 /**
- *   @FLOW3\Scope("singleton")
+ * This command provides some helper c¡cmd actions like:
+ *   - create an OAuthScope
+ *   - create an OAuthClient
+ *
+ * @FLOW3\Scope("singleton")
  */
-class OAuthCommandController extends   \TYPO3\FLOW3\Cli\CommandController {
+class OAuthCommandController extends \TYPO3\FLOW3\Cli\CommandController
+{
 
-	/**
-	 * @var \Kyoki\OAuth2\Domain\Repository\OAuthClientRepository
-	 * @FLOW3\Inject
-	 */
-	protected $oauthClientRepository;
+    /**
+     * @var \Kyoki\OAuth2\Domain\Repository\OAuthClientRepository
+     * @FLOW3\Inject
+     */
+    protected $oauthClientRepository;
 
-	/**
-	 * @var \Kyoki\OAuth2\Domain\Repository\OAuthScopeRepository
-	 * @FLOW3\Inject
-	 */
-	protected $oauthScopeRepository;
+    /**
+     * @var \Kyoki\OAuth2\Domain\Repository\OAuthScopeRepository
+     * @FLOW3\Inject
+     */
+    protected $oauthScopeRepository;
 
-	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Persistence\PersistenceManagerInterface
-	 */
-	protected $persistenceManager;
+    /**
+     * @FLOW3\Inject
+     * @var \TYPO3\FLOW3\Persistence\PersistenceManagerInterface
+     */
+    protected $persistenceManager;
 
-	/*
-	* @var array
-	*/
-	protected $settings;
+    /*
+     * @var array
+     */
+    protected $settings;
 
-	/**
-	 * @param array $settings
-	 * @return void
-	 */
-	public function injectSettings(array $settings) {
-		$this->settings = $settings;
-	}
+    /**
+     * @param array $settings
+     * @return void
+     */
+    public function injectSettings(array $settings)
+    {
+        $this->settings = $settings;
+    }
 
-	/**
-	 * @param string $description
-	 * @param string $redirect_uri
-	 */
-	public function newClientCommand($description, $redirect_uri, $partyUUID=NULL) {
-		$oauthClient = new OAuthClient($description, $redirect_uri);
-		if (!$partyUUID) {
-			$party = $this->persistenceManager->getObjectByIdentifier($this->settings['Client']['DefaultPartyUUID'],$this->settings['Client']['PartyClassName']);
-		} else {
-			$party = $this->persistenceManager->getObjectByIdentifier($partyUUID,$this->settings['Client']['PartyClassName']);
-		}
-		$oauthClient->setParty($party);
-		$this->oauthClientRepository->add($oauthClient);
-		$this->persistenceManager->persistAll();
+    /**
+     * Creates a new OAuth Client from command line
+     *
+     * @param $description
+     * @param $redirect_uri
+     * @param null $partyUUID The party persistence identifier that the OAuthClient blengs to
+     */
+    public function newClientCommand($description, $redirect_uri, $partyUUID = NULL)
+    {
+        $oauthClient = new OAuthClient($description, $redirect_uri);
+        if (!$partyUUID)
+        {
+            $party = $this->persistenceManager->getObjectByIdentifier($this->settings['Client']['DefaultPartyUUID'], $this->settings['Client']['PartyClassName']);
+        } else
+        {
+            $party = $this->persistenceManager->getObjectByIdentifier($partyUUID, $this->settings['Client']['PartyClassName']);
+        }
+        $oauthClient->setParty($party);
+        $this->oauthClientRepository->add($oauthClient);
+        $this->persistenceManager->persistAll();
 
-		echo 'Cliente creado, Id: ' . $oauthClient->getClientId(), ' Secret: ' . $oauthClient->getSecret() . "\n";
-	}
+        echo 'Cliente creado, Id: ' . $oauthClient->getClientId(), ' Secret: ' . $oauthClient->getSecret() . "\n";
+    }
 
-	/**
-	 * @param string $id
-	 * @param string $description
-	 */
-	public function newScopeCommand($id, $description) {
-		$oauthScope = new OAuthScope($id, $description);
-		$this->oauthScopeRepository->add($oauthScope);
-		$this->persistenceManager->persistAll();
-		echo 'Scope creado, Id: ' . $oauthScope->getId() . ' Description: ' . $oauthScope->getDescription(). "\n";
-	}
+    /**
+     * Creates a new OAuth Scope from command line
+     *
+     * @param string $id Scope id, should match withy a Role id
+     * @param string $description
+     */
+    public function newScopeCommand($id, $description)
+    {
+        $oauthScope = new OAuthScope($id, $description);
+        $this->oauthScopeRepository->add($oauthScope);
+        $this->persistenceManager->persistAll();
+        echo 'Scope creado, Id: ' . $oauthScope->getId() . ' Description: ' . $oauthScope->getDescription() . "\n";
+    }
 }
