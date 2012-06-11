@@ -50,6 +50,13 @@ abstract class OAuthAbstractController extends \TYPO3\FLOW3\Mvc\Controller\Actio
                     'error' => 'server_error',
                     'error_message' => $ex->getMessage()
                 ));
+        } catch (\TYPO3\FLOW3\Property\Exception $ex) {
+            // TODO soportar mas tipos de error y mostrarlos mejor con un template
+            echo  json_encode(
+                array(
+                    'error' => 'server_error',
+                    'error_message' => 'Exception while property mapping'
+                ));
         }
     }
 }
