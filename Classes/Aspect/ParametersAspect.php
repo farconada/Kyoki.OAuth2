@@ -3,13 +3,15 @@ namespace Kyoki\OAuth2\Aspect;
 use TYPO3\FLOW3\Annotations as FLOW3;
 use Kyoki\OAuth2\Exception\OAuthException;
 
-/**
- * Created by JetBrains PhpStorm.
- * User: fernando
- * Date: 17/10/11
- * Time: 19:05
- * To change this template use File | Settings | File Templates.
- */
+/*                                                                        *
+ * This script belongs to the Kyoki.OAuth2 package.                        *
+ * @author Fernando Arconada <fernando.arconada@gmail.com>                *
+ *
+ * It is free software; you can redistribute it and/or modify it under    *
+ * the terms of the GNU Lesser General Public License, either version 3   *
+ * of the License, or (at your option) any later version.                 *
+ *                                                                        *
+ *                                                                        */
 /**
  * @FLOW3\Aspect
  */

@@ -1,12 +1,14 @@
 <?php
 namespace Kyoki\OAuth2\Exception;
-/**
- * Created by JetBrains PhpStorm.
- * User: fernando
- * Date: 17/05/12
- * Time: 11:02
- * To change this template use File | Settings | File Templates.
- */
+/*                                                                        *
+ * This script belongs to the Kyoki.OAuth2 package.                        *
+ * @author Fernando Arconada <fernando.arconada@gmail.com>                *
+ *
+ * It is free software; you can redistribute it and/or modify it under    *
+ * the terms of the GNU Lesser General Public License, either version 3   *
+ * of the License, or (at your option) any later version.                 *
+ *                                                                        *
+ *                                                                        */
 class OAuthException extends \Exception {
 
 }

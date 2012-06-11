@@ -1,12 +1,14 @@
 <?php
 namespace Kyoki\OAuth2\Command;
-/**
- * Created by JetBrains PhpStorm.
- * User: fernando
- * Date: 11/05/12
- * Time: 13:07
- * To change this template use File | Settings | File Templates.
- */
+/*                                                                        *
+ * This script belongs to the Kyoki.OAuth2 package.                        *
+ * @author Fernando Arconada <fernando.arconada@gmail.com>                *
+ *
+ * It is free software; you can redistribute it and/or modify it under    *
+ * the terms of the GNU Lesser General Public License, either version 3   *
+ * of the License, or (at your option) any later version.                 *
+ *                                                                        *
+ *                                                                        */
 use TYPO3\FLOW3\Annotations as FLOW3;
 use Kyoki\OAuth2\Domain\Model\OAuthClient;
 use Kyoki\OAuth2\Domain\Model\OAuthScope;
