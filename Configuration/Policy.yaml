@@ -3,11 +3,19 @@ resources:
     Kyoki_OAuth2: 'method(Kyoki\OAuth2\Controller\OAuthController->.*Action())'
     Kyoki_OAuth2_TokenEndpoint: 'method(Kyoki\OAuth2\Controller\TokenController->.*Action())'
 roles:
+# OAuth role to be able to use authorization and token endpoint
   OAuth:
+# Example roles
+#  myscope: [myresources]
+#  Editor: [OAuth,myscope]
 acls:
   OAuth:
     methods:
       Kyoki_OAuth2: GRANT
       Kyoki_OAuth2_TokenEndpoint: GRANT
+
+#  myresources:
+#      methods:
+#        F2_TuitLawyer_Api: GRANT
 
 

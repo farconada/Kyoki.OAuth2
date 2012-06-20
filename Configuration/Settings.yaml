@@ -4,6 +4,8 @@ Kyoki:
       DefaultPartyUUID: 'd07b121f-5940-4326-844b-87d3654a38ea'
       PartyClassName: 'F2\TuitLawyer\Domain\Model\Usuario'
 
+# Authorization endpoint is secured by the provider used to authenticate the user
+
 TYPO3:
   FLOW3:
     security:
@@ -11,6 +13,8 @@ TYPO3:
           accessDecisionVoters: [TYPO3\FLOW3\Security\Authorization\Voter\Policy, Kyoki\OAuth2\Security\Authorization\Voter\Policy]
       authentication:
         providers:
+# Provider to secure the token endpoint
+# RFC says could be authenticated by HTTP Basic and credentials in POST
           OAuthClientProvider:
             provider: Kyoki\OAuth2\Security\Authentication\Provider\ClientIdSecretProvider
             token: Kyoki\OAuth2\Security\Authentication\Token\ClientIdSecret
@@ -24,6 +28,9 @@ TYPO3:
             entryPoint: HttpBasic
             entryPointOptions:
               realm: 'OAuth2 Client Authentication'
+
+
+# Resources protected by OAuth token
 #          OAuthTokenProvider:
 #            provider: Kyoki\OAuth2\Security\Authentication\Provider\AccessTokenProvider
 #            token: Kyoki\OAuth2\Security\Authentication\Token\AccessTokenHttpBasic
@@ -32,11 +39,12 @@ TYPO3:
 #            entryPoint: HttpBasic
 #            entryPointOptions:
 #              realm: 'OAuth2 Access Token Authentication'
+
+# Disable the defaultProvider for Resources protected by OAuth and the Token endpoint
 #          DefaultProvider:
 #            provider: PersistedUsernamePasswordProvider
 #            entryPoint: 'WebRedirect'
 #            requestPatterns:
-#              controllerObjectName: (?!Kyoki\OAuth2\Controller\TokenController)
-#              controllerObjectName: .*
+#              controllerObjectName: '(?!.*\Controller\(Token|Api)Controller).*'
 #            entryPointOptions:
 #              uri: 'login'
