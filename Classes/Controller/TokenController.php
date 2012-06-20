@@ -22,50 +22,46 @@ use Kyoki\OAuth2\Controller\OAuthAbstractController;
  *
  * @FLOW3\Scope("singleton")
  */
-class TokenController extends OAuthAbstractController
-{
-    /**
-     * @var \Kyoki\OAuth2\Domain\Repository\OAuthTokenRepository
-     * @FLOW3\Inject
-     */
-    protected $oauthTokenRepository;
+class TokenController extends OAuthAbstractController {
+	/**
+	 * @var \Kyoki\OAuth2\Domain\Repository\OAuthTokenRepository
+	 * @FLOW3\Inject
+	 */
+	protected $oauthTokenRepository;
 
-    /**
-     * @var \Kyoki\OAuth2\Domain\Repository\OAuthCodeRepository
-     * @FLOW3\Inject
-     */
-    protected $oauthCodeRepository;
+	/**
+	 * @var \Kyoki\OAuth2\Domain\Repository\OAuthCodeRepository
+	 * @FLOW3\Inject
+	 */
+	protected $oauthCodeRepository;
 
 
-    /**
-     * Token endpoint
-     * Should be authenticated by client_id and client_secret
-     *
-     * @param string $grant_type
-     * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $code persistence identifier
-     * @param string $refresh_token
-     */
-    public function tokenAction($grant_type, OAuthCode $code = NULL, $refresh_token = '')
-    {
-        if ($grant_type == 'refresh_token')
-        {
-            $token = $this->oauthTokenRepository->findByRefreshToken($refresh_token);
-            if ($token)
-            {
-                $this->oauthTokenRepository->remove($token);
+	/**
+	 * Token endpoint
+	 * Should be authenticated by client_id and client_secret
+	 *
+	 * @param string $grant_type
+	 * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $code persistence identifier
+	 * @param string $refresh_token
+	 */
+	public function tokenAction($grant_type, OAuthCode $code = NULL, $refresh_token = '') {
+		if ($grant_type == 'refresh_token') {
+			$token = $this->oauthTokenRepository->findByRefreshToken($refresh_token);
+			if ($token) {
+				$this->oauthTokenRepository->remove($token);
 
-            }
-        }
-        $this->oauthCodeRepository->removeCodeTokens($code);
-        $token = new OAuthToken($code, 3600, 'Bearer');
-        $token->setOauthCode($code);
-        $this->oauthTokenRepository->add($token);
-        return json_encode(array(
-            'access_token' => $token->getAccessToken(),
-            'token_type' => $token->getTokenType(),
-            'expires_in' => $token->getExpiresIn(),
-            'refresh_token' => $token->getRefreshToken()
-        ));
-    }
+			}
+		}
+		$this->oauthCodeRepository->removeCodeTokens($code);
+		$token = new OAuthToken($code, 3600, 'Bearer');
+		$token->setOauthCode($code);
+		$this->oauthTokenRepository->add($token);
+		return json_encode(array(
+			'access_token' => $token->getAccessToken(),
+			'token_type' => $token->getTokenType(),
+			'expires_in' => $token->getExpiresIn(),
+			'refresh_token' => $token->getRefreshToken()
+		));
+	}
 
 }

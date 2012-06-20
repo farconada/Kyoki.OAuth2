@@ -18,19 +18,16 @@ use Kyoki\OAuth2\Domain\Model\OAuthCode;
  *
  * @FLOW3\Scope("singleton")
  */
-class OAuthCodeRepository extends \TYPO3\FLOW3\Persistence\Repository
-{
+class OAuthCodeRepository extends \TYPO3\FLOW3\Persistence\Repository {
 
-    /**
-     * @param OAuthCode $oauthCode
-     */
-    public function removeCodeTokens(OAuthCode $oauthCode)
-    {
-        $tokens = $oauthCode->getTokens();
-        foreach ($tokens as $token)
-        {
-            $this->persistenceManager->remove($token);
-        }
-        $this->persistenceManager->persistAll();
-    }
+	/**
+	 * @param OAuthCode $oauthCode
+	 */
+	public function removeCodeTokens(OAuthCode $oauthCode) {
+		$tokens = $oauthCode->getTokens();
+		foreach ($tokens as $token) {
+			$this->persistenceManager->remove($token);
+		}
+		$this->persistenceManager->persistAll();
+	}
 }

@@ -17,7 +17,6 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * @FLOW3\Scope("singleton")
  */
-class OAuthClientRepository extends \TYPO3\FLOW3\Persistence\Repository
-{
+class OAuthClientRepository extends \TYPO3\FLOW3\Persistence\Repository {
 
 }

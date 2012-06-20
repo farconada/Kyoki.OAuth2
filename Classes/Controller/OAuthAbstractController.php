@@ -20,43 +20,38 @@ use Kyoki\OAuth2\Exception\OAuthException;
  *
  * @FLOW3\Scope("singleton")
  */
-abstract class OAuthAbstractController extends \TYPO3\FLOW3\Mvc\Controller\ActionController
-{
+abstract class OAuthAbstractController extends \TYPO3\FLOW3\Mvc\Controller\ActionController {
 
-    /**
-     * Mainly for managin extensions
-     *
-     * @param \TYPO3\FLOW3\Mvc\RequestInterface $request
-     * @param \TYPO3\FLOW3\Mvc\ResponseInterface $response
-     */
-    public function processRequest(\TYPO3\FLOW3\Mvc\RequestInterface $request, \TYPO3\FLOW3\Mvc\ResponseInterface $response)
-    {
-        try
-        {
-            parent::processRequest($request, $response);
-        } catch (\TYPO3\FLOW3\Mvc\Exception\RequiredArgumentMissingException $ex)
-        {
-            // TODO soportar mas tipos de error y mostrarlos mejor con un template
-            echo  json_encode(
-                array(
-                    'error' => 'server_error',
-                    'error_message' => $ex->getMessage()
-                ));
-        } catch (OAuthException $ex)
-        {
-            // TODO soportar mas tipos de error y mostrarlos mejor con un template
-            echo  json_encode(
-                array(
-                    'error' => 'server_error',
-                    'error_message' => $ex->getMessage()
-                ));
-        } catch (\TYPO3\FLOW3\Property\Exception $ex) {
-            // TODO soportar mas tipos de error y mostrarlos mejor con un template
-            echo  json_encode(
-                array(
-                    'error' => 'server_error',
-                    'error_message' => 'Exception while property mapping'
-                ));
-        }
-    }
+	/**
+	 * Mainly for managin extensions
+	 *
+	 * @param \TYPO3\FLOW3\Mvc\RequestInterface $request
+	 * @param \TYPO3\FLOW3\Mvc\ResponseInterface $response
+	 */
+	public function processRequest(\TYPO3\FLOW3\Mvc\RequestInterface $request, \TYPO3\FLOW3\Mvc\ResponseInterface $response) {
+		try {
+			parent::processRequest($request, $response);
+		} catch (\TYPO3\FLOW3\Mvc\Exception\RequiredArgumentMissingException $ex) {
+			// TODO soportar mas tipos de error y mostrarlos mejor con un template
+			echo  json_encode(
+				array(
+					'error' => 'server_error',
+					'error_message' => $ex->getMessage()
+				));
+		} catch (OAuthException $ex) {
+			// TODO soportar mas tipos de error y mostrarlos mejor con un template
+			echo  json_encode(
+				array(
+					'error' => 'server_error',
+					'error_message' => $ex->getMessage()
+				));
+		} catch (\TYPO3\FLOW3\Property\Exception $ex) {
+			// TODO soportar mas tipos de error y mostrarlos mejor con un template
+			echo  json_encode(
+				array(
+					'error' => 'server_error',
+					'error_message' => 'Exception while property mapping'
+				));
+		}
+	}
 }

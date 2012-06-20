@@ -9,7 +9,6 @@ namespace Kyoki\OAuth2\Exception;
  * of the License, or (at your option) any later version.                 *
  *                                                                        *
  *                                                                        */
-class OAuthException extends \Exception
-{
+class OAuthException extends \Exception {
 
 }

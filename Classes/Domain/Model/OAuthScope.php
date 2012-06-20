@@ -17,50 +17,45 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * @FLOW3\Entity
  */
-class OAuthScope
-{
-    /**
-     * @FLOW3\Identity
-     * @ORM\Id
-     * @FLOW3\Validate(type="Text")
-     * @var string
-     */
-    protected $id;
+class OAuthScope {
+	/**
+	 * @FLOW3\Identity
+	 * @ORM\Id
+	 * @FLOW3\Validate(type="Text")
+	 * @var string
+	 */
+	protected $id;
 
-    /**
-     * @var string
-     */
-    protected $description;
+	/**
+	 * @var string
+	 */
+	protected $description;
 
-    public function __construct($id, $description = '')
-    {
-        $this->id = $id;
-        $this->setDescription($description);
-    }
+	public function __construct($id, $description = '') {
+		$this->id = $id;
+		$this->setDescription($description);
+	}
 
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
+	/**
+	 * @param string $description
+	 */
+	public function setDescription($description) {
+		$this->description = $description;
+	}
 
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
+	/**
+	 * @return string
+	 */
+	public function getDescription() {
+		return $this->description;
+	}
 
 
-    /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * @return string
+	 */
+	public function getId() {
+		return $this->id;
+	}
 
 }

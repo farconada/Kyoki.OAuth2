@@ -18,8 +18,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * @FLOW3\Scope("singleton")
  */
-class Package extends BasePackage
-{
+class Package extends BasePackage {
 
 }
 
