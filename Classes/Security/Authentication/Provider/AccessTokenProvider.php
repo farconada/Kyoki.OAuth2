@@ -57,14 +57,11 @@ class AccessTokenProvider extends \TYPO3\FLOW3\Security\Authentication\Provider\
 			 * @var $oauthToken \Kyoki\OAuth2\Domain\Model\OAuthToken;
 			 */
 			$oauthToken = $this->oauthTokenRepository->findByIdentifier($credentials['access_token']);
-			file_put_contents('/tmp/dump.txt', "Looking for token " . $credentials['access_token'] . "\n", FILE_APPEND);
 		}
 
 		if (is_object($oauthToken)) {
-			file_put_contents('/tmp/dump.txt', "I have a Token object\n", FILE_APPEND);
 			$now = new \DateTime();
 			if (($oauthToken->getCreationDate()->getTimestamp() + $oauthToken->getExpiresIn()) < $now->getTimestamp()) {
-				file_put_contents('/tmp/dump.txt', "Token expired\n", FILE_APPEND);
 				$authenticationToken->setAuthenticationStatus(\TYPO3\FLOW3\Security\Authentication\TokenInterface::WRONG_CREDENTIALS);
 			} else {
 				/**
@@ -74,7 +71,6 @@ class AccessTokenProvider extends \TYPO3\FLOW3\Security\Authentication\Provider\
 				$authenticationToken->setAuthenticationStatus(\TYPO3\FLOW3\Security\Authentication\TokenInterface::AUTHENTICATION_SUCCESSFUL);
 				$authenticationToken->setOauthToken($oauthToken);
 				$authenticationToken->setAccount($account);
-				file_put_contents('/tmp/dump.txt', "Authenticated as " . $account->getParty()->getNombre() . "\n", FILE_APPEND);
 			}
 
 		} elseif ($authenticationToken->getAuthenticationStatus() !== \TYPO3\FLOW3\Security\Authentication\TokenInterface::AUTHENTICATION_SUCCESSFUL) {
