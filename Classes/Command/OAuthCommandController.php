@@ -56,8 +56,8 @@ class OAuthCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	/**
 	 * Creates a new OAuth Client from command line
 	 *
-	 * @param $description
-	 * @param $redirectUri
+	 * @param string $description description of the OAuth client
+	 * @param string $redirectUri URL match that is allowed to use the API
 	 * @param null $partyUuid The party persistence identifier that the OAuthClient blengs to
 	 */
 	public function newClientCommand($description, $redirectUri, $partyUuid = NULL) {
@@ -71,20 +71,19 @@ class OAuthCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 		$this->oauthClientRepository->add($oauthClient);
 		$this->persistenceManager->persistAll();
 		
-		$this->outputLine('Something in english, Id: "%s", Secret: "%s"', array($oauthClient->getClientId(), $oauthClient->getSecret());
+		$this->outputLine('OAuth Client created, Id: "%s", Secret: "%s"', array($oauthClient->getClientId(), $oauthClient->getSecret()));
 	}
 
 	/**
 	 * Creates a new OAuth Scope from command line
 	 *
 	 * @param string $id Scope id, should match withy a Role id
-	 * @param string $description [BW] Please add a description for $description ;)
+	 * @param string $description Scope description
 	 */
 	public function newScopeCommand($id, $description) {
 		$oauthScope = new OAuthScope($id, $description);
 		$this->oauthScopeRepository->add($oauthScope);
 		$this->persistenceManager->persistAll();
-		// [BW] Use $this->output() or $this->outputLine(). See above
-		echo 'Scope creado, Id: ' . $oauthScope->getId() . ' Description: ' . $oauthScope->getDescription() . "\n";
+		$this->outputLine('OAuth Scope created, Id "%s"  Description: "%s"' , array($oauthScope->getId() ,$oauthScope->getDescription()));
 	}
 }
