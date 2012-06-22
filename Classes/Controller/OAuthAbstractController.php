@@ -27,12 +27,14 @@ abstract class OAuthAbstractController extends \TYPO3\FLOW3\Mvc\Controller\Actio
 	 *
 	 * @param \TYPO3\FLOW3\Mvc\RequestInterface $request
 	 * @param \TYPO3\FLOW3\Mvc\ResponseInterface $response
+	 * @return void
 	 */
 	public function processRequest(\TYPO3\FLOW3\Mvc\RequestInterface $request, \TYPO3\FLOW3\Mvc\ResponseInterface $response) {
 		try {
 			parent::processRequest($request, $response);
 		} catch (\TYPO3\FLOW3\Mvc\Exception\RequiredArgumentMissingException $ex) {
 			// TODO soportar mas tipos de error y mostrarlos mejor con un template
+			// [BW] CGL: using echo is generally a bad idea. In this case you should append the content to $response
 			echo  json_encode(
 				array(
 					'error' => 'server_error',
@@ -40,6 +42,7 @@ abstract class OAuthAbstractController extends \TYPO3\FLOW3\Mvc\Controller\Actio
 				));
 		} catch (OAuthException $ex) {
 			// TODO soportar mas tipos de error y mostrarlos mejor con un template
+			// [BW] CGL: see above
 			echo  json_encode(
 				array(
 					'error' => 'server_error',
@@ -47,6 +50,7 @@ abstract class OAuthAbstractController extends \TYPO3\FLOW3\Mvc\Controller\Actio
 				));
 		} catch (\TYPO3\FLOW3\Property\Exception $ex) {
 			// TODO soportar mas tipos de error y mostrarlos mejor con un template
+			// [BW] CGL: see above
 			echo  json_encode(
 				array(
 					'error' => 'server_error',
