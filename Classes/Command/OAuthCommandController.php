@@ -40,9 +40,9 @@ class OAuthCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	 */
 	protected $persistenceManager;
 
-	/*
-* @var array
-*/
+	/**
+	 * @var array
+	 */
 	protected $settings;
 
 	/**
@@ -57,33 +57,34 @@ class OAuthCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	 * Creates a new OAuth Client from command line
 	 *
 	 * @param $description
-	 * @param $redirect_uri
-	 * @param null $partyUUID The party persistence identifier that the OAuthClient blengs to
+	 * @param $redirectUri
+	 * @param null $partyUuid The party persistence identifier that the OAuthClient blengs to
 	 */
-	public function newClientCommand($description, $redirect_uri, $partyUUID = NULL) {
-		$oauthClient = new OAuthClient($description, $redirect_uri);
-		if (!$partyUUID) {
+	public function newClientCommand($description, $redirectUri, $partyUuid = NULL) {
+		$oauthClient = new OAuthClient($description, $redirectUri);
+		if (!$partyUuid) {
 			$party = $this->persistenceManager->getObjectByIdentifier($this->settings['Client']['DefaultPartyUUID'], $this->settings['Client']['PartyClassName']);
 		} else {
-			$party = $this->persistenceManager->getObjectByIdentifier($partyUUID, $this->settings['Client']['PartyClassName']);
+			$party = $this->persistenceManager->getObjectByIdentifier($partyUuid, $this->settings['Client']['PartyClassName']);
 		}
 		$oauthClient->setParty($party);
 		$this->oauthClientRepository->add($oauthClient);
 		$this->persistenceManager->persistAll();
-
-		echo 'Cliente creado, Id: ' . $oauthClient->getClientId(), ' Secret: ' . $oauthClient->getSecret() . "\n";
+		
+		$this->outputLine('Something in english, Id: "%s", Secret: "%s"', array($oauthClient->getClientId(), $oauthClient->getSecret());
 	}
 
 	/**
 	 * Creates a new OAuth Scope from command line
 	 *
 	 * @param string $id Scope id, should match withy a Role id
-	 * @param string $description
+	 * @param string $description [BW] Please add a description for $description ;)
 	 */
 	public function newScopeCommand($id, $description) {
 		$oauthScope = new OAuthScope($id, $description);
 		$this->oauthScopeRepository->add($oauthScope);
 		$this->persistenceManager->persistAll();
+		// [BW] Use $this->output() or $this->outputLine(). See above
 		echo 'Scope creado, Id: ' . $oauthScope->getId() . ' Description: ' . $oauthScope->getDescription() . "\n";
 	}
 }
