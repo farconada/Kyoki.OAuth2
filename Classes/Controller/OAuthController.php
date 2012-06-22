@@ -25,6 +25,7 @@ use Kyoki\OAuth2\Controller\OAuthAbstractController;
  * @FLOW3\Scope("singleton")
  */
 class OAuthController extends OAuthAbstractController {
+
 	/**
 	 * @var \TYPO3\FLOW3\Security\Context
 	 * @FLOW3\Inject
@@ -46,20 +47,25 @@ class OAuthController extends OAuthAbstractController {
 	 * @param Kyoki\OAuth2\Domain\Model\OAuthClient $client_id persistence identifier
 	 * @param string $redirect_uri
 	 * @param Kyoki\OAuth2\Domain\Model\OAuthScope $scope persistence identifier
+	 * @return void
+	 * @throws \Kyoki\OAuth2\Exception\OAuthException
 	 */
 	public function authorizeAction($response_type, OAuthClient $client_id, $redirect_uri, OAuthScope $scope) {
+		// [BW] That seems very error prone to me. What if there are Regex modifiers in the $redirect_uri? Just compare this without preg_*!
 		if (!preg_match('/' . urlencode($client_id->getRedirectUri()) . '/', urlencode($redirect_uri))) {
+			// [BW] English exception would be nice
 			throw new OAuthException('La URL de redireccion no concuerda con las autorizada', 1337249067);
 		}
 		$oauthCode = new OAuthCode($client_id, $this->securityContext->getParty(), $scope);
 		$oauthCode->setRedirectUri($redirect_uri);
+		// [BW] CGL: Use strict comparison ("===") and replace the magic string with a constant
 		if ($response_type == 'code') {
 			$this->oauthCodeRepository->add($oauthCode);
 			$this->persistenceManager->persistAll();
 			$this->view->assign('oauthCode', $oauthCode);
 			$this->view->assign('oauthScope', $scope);
 		} else {
-			throw new OAuthException('Response Type not implemented', 1337249132);
+			throw new OAuthException(sprintf('Response Type "%s" not implemented', $response_type), 1337249132);
 		}
 	}
 
@@ -67,10 +73,12 @@ class OAuthController extends OAuthAbstractController {
 	 * Access granted, return an OAuth Code
 	 *
 	 * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $oauthCode
+	 * @return void
 	 */
 	public function grantAction(OAuthCode $oauthCode) {
 		$oauthCode->setEnabled(TRUE);
 		$this->oauthCodeRepository->update($oauthCode);
+		// [BW] What if the redirect URI already contains a "?"?
 		$this->redirectToUri($oauthCode->getRedirectUri() . '?' . http_build_query(array('code' => $oauthCode->getCode()), null, '&'));
 	}
 
@@ -78,8 +86,10 @@ class OAuthController extends OAuthAbstractController {
 	 * Access denied
 	 *
 	 * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $oauthCode
+	 * @return void
 	 */
 	public function denyAction(OAuthCode $oauthCode) {
+		// [BW] you can pass a status code to $this->redirectToUri(). In this case it should probably be a 403 status?!
 		$this->redirectToUri($oauthCode->getRedirectUri() . '?' . http_build_query(array('error' => 'access_denied'), null, '&'));
 		$this->oauthCodeRepository->remove($oauthCode);
 	}
