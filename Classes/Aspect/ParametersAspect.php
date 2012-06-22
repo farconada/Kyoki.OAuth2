@@ -21,6 +21,16 @@ use Kyoki\OAuth2\Exception\OAuthException;
 class ParametersAspect {
 
 	/**
+	 * @see http://tools.ietf.org/html/draft-ietf-oauth-v2-28
+	 */
+	const GRANTTYPE_REFRESHTOKEN = 'refresh_token';
+
+	/**
+	 *  @see http://tools.ietf.org/html/draft-ietf-oauth-v2-28
+	 */
+	const GRANTTYPE_AUTHCODE = 'authorization_code';
+
+	/**
 	 * @var \TYPO3\FLOW3\Security\Context
 	 * @FLOW3\Inject
 	 */
@@ -56,13 +66,12 @@ class ParametersAspect {
 	 */
 	public function validateTokenParameters(\TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint) {
 		$arguments = $joinPoint->getMethodArguments();
-		// [BW] CGL: Always use strict comparison ("!==")
-		// [BW] CGL: Try to avoid "magic strings". This could be replaced with $arguments['grant_type'] !== SELF::GRANTTYPE_REFRESHTOKEN
-		if ($arguments['grant_type'] != 'refresh_token' && $arguments['grant_type'] != 'authorization_code') {
+
+		if ($arguments['grant_type'] !== SELF::GRANTTYPE_REFRESHTOKEN && $arguments['grant_type'] !== SELF::GRANTTYPE_AUTHCODE) {
 			throw new OAuthException('unsupported grant type', 1338317418);
 		}
-		// [BW] CGL: The same here $arguments['grant_type'] !== SELF::GRANTTYPE_AUTHCODE and !isset($arguments['code'])
-		if ($arguments['grant_type'] == 'authorization_code' && !$arguments['code']) {
+
+		if ($arguments['grant_type'] == SELF::GRANTTYPE_AUTHCODE && !isset($arguments['code'])) {
 			throw new OAuthException('code not set', 1338317419);
 		}
 	}
@@ -80,8 +89,7 @@ class ParametersAspect {
 			 * @var $code \Kyoki\OAuth2\Domain\Model\OAuthCode;
 			 */
 			$code = $joinPoint->getMethodArgument('code');
-			// [BW] CGL: Always use strict comparison ("!==")
-			if ($this->securityContext->getParty() != $code->getParty()) {
+			if ($this->securityContext->getParty() !== $code->getParty()) {
 				throw new OAuthException('You are not the owner of this security code', 1338318722);
 			}
 		}
