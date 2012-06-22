@@ -23,6 +23,7 @@ use Kyoki\OAuth2\Controller\OAuthAbstractController;
  * @FLOW3\Scope("singleton")
  */
 class TokenController extends OAuthAbstractController {
+
 	/**
 	 * @var \Kyoki\OAuth2\Domain\Repository\OAuthTokenRepository
 	 * @FLOW3\Inject
@@ -43,16 +44,19 @@ class TokenController extends OAuthAbstractController {
 	 * @param string $grant_type
 	 * @param \Kyoki\OAuth2\Domain\Model\OAuthCode $code persistence identifier
 	 * @param string $refresh_token
+	 * @return void
 	 */
 	public function tokenAction($grant_type, OAuthCode $code = NULL, $refresh_token = '') {
+		// [BW] CGL: strict comparison and constants ;)
 		if ($grant_type == 'refresh_token') {
 			$token = $this->oauthTokenRepository->findByRefreshToken($refresh_token);
-			if ($token) {
+			if ($token !== NULL) {
 				$this->oauthTokenRepository->remove($token);
-
 			}
 		}
 		$this->oauthCodeRepository->removeCodeTokens($code);
+		// [BW] Maybe the expiration should be stored in the settings. That would also make it more readable
+		// [BW] 'Bearer' should be replaced with OAuthToken::TOKENTYPE_BEARER for readability and to avoid typos
 		$token = new OAuthToken($code, 3600, 'Bearer');
 		$token->setOauthCode($code);
 		$this->oauthTokenRepository->add($token);
