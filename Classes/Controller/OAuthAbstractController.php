@@ -33,29 +33,32 @@ abstract class OAuthAbstractController extends \TYPO3\FLOW3\Mvc\Controller\Actio
 		try {
 			parent::processRequest($request, $response);
 		} catch (\TYPO3\FLOW3\Mvc\Exception\RequiredArgumentMissingException $ex) {
-			// TODO soportar mas tipos de error y mostrarlos mejor con un template
-			// [BW] CGL: using echo is generally a bad idea. In this case you should append the content to $response
-			echo  json_encode(
-				array(
-					'error' => 'server_error',
-					'error_message' => $ex->getMessage()
-				));
+			$this->setErrorResponse($response,$ex->getMessage());
 		} catch (OAuthException $ex) {
-			// TODO soportar mas tipos de error y mostrarlos mejor con un template
-			// [BW] CGL: see above
-			echo  json_encode(
-				array(
-					'error' => 'server_error',
-					'error_message' => $ex->getMessage()
-				));
+			$this->setErrorResponse($response,$ex->getMessage());
 		} catch (\TYPO3\FLOW3\Property\Exception $ex) {
-			// TODO soportar mas tipos de error y mostrarlos mejor con un template
-			// [BW] CGL: see above
-			echo  json_encode(
-				array(
-					'error' => 'server_error',
-					'error_message' => 'Exception while property mapping'
-				));
+			$this->setErrorResponse($response,'Exception while property mapping');
 		}
+	}
+
+	/**
+	 * Sets error content in the response object
+	 *
+	 * @param ResponseInterface $response
+	 * @param $message
+	 */
+	private function setErrorResponse(\TYPO3\FLOW3\Mvc\ResponseInterface $response, $message) {
+		$response->setContent(json_encode(
+			array(
+				'error' => 'server_error',
+				'error_message' => $message
+			)));
+		if ($response instanceof \TYPO3\FLOW3\Http\Response) {
+			/**
+			 * @var $response \TYPO3\FLOW3\Http\Response
+			 */
+			$response->setHeader('Content-Type', 'application/json');
+		}
+
 	}
 }
