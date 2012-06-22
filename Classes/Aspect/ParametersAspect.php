@@ -1,7 +1,5 @@
 <?php
 namespace Kyoki\OAuth2\Aspect;
-use TYPO3\FLOW3\Annotations as FLOW3;
-use Kyoki\OAuth2\Exception\OAuthException;
 
 /*                                                                        *
  * This script belongs to the Kyoki.OAuth2 package.                        *
@@ -12,6 +10,10 @@ use Kyoki\OAuth2\Exception\OAuthException;
  * of the License, or (at your option) any later version.                 *
  *                                                                        *
  *                                                                        */
+ 
+use TYPO3\FLOW3\Annotations as FLOW3;
+use Kyoki\OAuth2\Exception\OAuthException;
+ 
 /**
  * This Aspect is responsible os some parameters validation, specially related to grant types
  * @FLOW3\Aspect
@@ -54,9 +56,12 @@ class ParametersAspect {
 	 */
 	public function validateTokenParameters(\TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint) {
 		$arguments = $joinPoint->getMethodArguments();
+		// [BW] CGL: Always use strict comparison ("!==")
+		// [BW] CGL: Try to avoid "magic strings". This could be replaced with $arguments['grant_type'] !== SELF::GRANTTYPE_REFRESHTOKEN
 		if ($arguments['grant_type'] != 'refresh_token' && $arguments['grant_type'] != 'authorization_code') {
 			throw new OAuthException('unsupported grant type', 1338317418);
 		}
+		// [BW] CGL: The same here $arguments['grant_type'] !== SELF::GRANTTYPE_AUTHCODE and !isset($arguments['code'])
 		if ($arguments['grant_type'] == 'authorization_code' && !$arguments['code']) {
 			throw new OAuthException('code not set', 1338317419);
 		}
@@ -75,6 +80,7 @@ class ParametersAspect {
 			 * @var $code \Kyoki\OAuth2\Domain\Model\OAuthCode;
 			 */
 			$code = $joinPoint->getMethodArgument('code');
+			// [BW] CGL: Always use strict comparison ("!==")
 			if ($this->securityContext->getParty() != $code->getParty()) {
 				throw new OAuthException('You are not the owner of this security code', 1338318722);
 			}
