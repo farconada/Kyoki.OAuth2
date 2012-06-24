@@ -27,6 +27,11 @@ use Kyoki\OAuth2\Controller\OAuthAbstractController;
 class OAuthController extends OAuthAbstractController {
 
 	/**
+	 * @see http://tools.ietf.org/html/draft-ietf-oauth-v2-28 4.1.1
+	 */
+	const RESPONSETYPE_CODE = 'code';
+
+	/**
 	 * @var \TYPO3\FLOW3\Security\Context
 	 * @FLOW3\Inject
 	 */
@@ -51,15 +56,14 @@ class OAuthController extends OAuthAbstractController {
 	 * @throws \Kyoki\OAuth2\Exception\OAuthException
 	 */
 	public function authorizeAction($response_type, OAuthClient $client_id, $redirect_uri, OAuthScope $scope) {
-		// [BW] That seems very error prone to me. What if there are Regex modifiers in the $redirect_uri? Just compare this without preg_*!
-		if (!preg_match('/' . urlencode($client_id->getRedirectUri()) . '/', urlencode($redirect_uri))) {
-			// [BW] English exception would be nice
-			throw new OAuthException('La URL de redireccion no concuerda con las autorizada', 1337249067);
+		// the first part of the $redirect_url string match the authorized redirect_url in the client object
+		$isInAuthorizedUrl = strpos(urlencode(strtolower($redirect_uri)), urlencode(strtolower($client_id->getRedirectUri())));
+		if ($isInAuthorizedUrl === FALSE || $isInAuthorizedUrl != 0 ) {
+			throw new OAuthException('This redirect_url is not authorized', 1337249067);
 		}
 		$oauthCode = new OAuthCode($client_id, $this->securityContext->getParty(), $scope);
 		$oauthCode->setRedirectUri($redirect_uri);
-		// [BW] CGL: Use strict comparison ("===") and replace the magic string with a constant
-		if ($response_type == 'code') {
+		if ($response_type === SELF::RESPONSETYPE_CODE) {
 			$this->oauthCodeRepository->add($oauthCode);
 			$this->persistenceManager->persistAll();
 			$this->view->assign('oauthCode', $oauthCode);
@@ -78,8 +82,7 @@ class OAuthController extends OAuthAbstractController {
 	public function grantAction(OAuthCode $oauthCode) {
 		$oauthCode->setEnabled(TRUE);
 		$this->oauthCodeRepository->update($oauthCode);
-		// [BW] What if the redirect URI already contains a "?"?
-		$this->redirectToUri($oauthCode->getRedirectUri() . '?' . http_build_query(array('code' => $oauthCode->getCode()), null, '&'));
+		$this->redirectToUri($this->appendToUserUrl($oauthCode->getRedirectUri(),array('code' => $oauthCode->getCode())));
 	}
 
 	/**
@@ -89,9 +92,27 @@ class OAuthController extends OAuthAbstractController {
 	 * @return void
 	 */
 	public function denyAction(OAuthCode $oauthCode) {
-		// [BW] you can pass a status code to $this->redirectToUri(). In this case it should probably be a 403 status?!
-		$this->redirectToUri($oauthCode->getRedirectUri() . '?' . http_build_query(array('error' => 'access_denied'), null, '&'));
+		$this->redirectToUri($this->appendToUserUrl($oauthCode->getRedirectUri(),array('error' => 'access_denied')),0,403);
 		$this->oauthCodeRepository->remove($oauthCode);
+	}
+
+	/**
+	 * Appends some paraters to a URL given by the user input
+	 *
+	 * @param string $userUrl  User URL
+	 * @param array $parameters asociative array of name=value parameters to be appended
+	 * @return string
+	 */
+	private function appendToUserUrl($userUrl, $parameters) {
+		$urlComponents = parse_url($userUrl);
+		if (!isset($urlComponents['query'])) {
+			if (substr($userUrl,-1) === '?') {
+				return $userUrl . http_build_query($parameters, null, '&');
+			}
+			return $userUrl . '?' . http_build_query($parameters, null, '&');
+		} else {
+			return $userUrl . '&' . http_build_query($parameters, null, '&');
+		}
 	}
 
 
