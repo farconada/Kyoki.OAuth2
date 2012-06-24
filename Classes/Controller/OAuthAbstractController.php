@@ -58,6 +58,7 @@ abstract class OAuthAbstractController extends \TYPO3\FLOW3\Mvc\Controller\Actio
 			 * @var $response \TYPO3\FLOW3\Http\Response
 			 */
 			$response->setHeader('Content-Type', 'application/json');
+			$response->setStatus(500);
 		}
 
 	}
