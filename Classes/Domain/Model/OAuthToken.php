@@ -19,6 +19,12 @@ use Kyoki\OAuth2\Domain\Model\OAuthCode;
  * @FLOW3\Entity
  */
 class OAuthToken {
+
+	/**
+	 * @see http://tools.ietf.org/html/draft-ietf-oauth-v2-28 7.1
+	 */
+	const TOKENTYPE_BEARER = 'Bearer';
+
 	/**
 	 * @FLOW3\Identity
 	 * @ORM\Id

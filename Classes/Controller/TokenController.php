@@ -25,6 +25,11 @@ use Kyoki\OAuth2\Controller\OAuthAbstractController;
 class TokenController extends OAuthAbstractController {
 
 	/**
+	 * @see http://tools.ietf.org/html/draft-ietf-oauth-v2-28
+	 */
+	const GRANTTYPE_REFRESHTOKEN = 'refresh_token';
+
+	/**
 	 * @var \Kyoki\OAuth2\Domain\Repository\OAuthTokenRepository
 	 * @FLOW3\Inject
 	 */
@@ -47,17 +52,14 @@ class TokenController extends OAuthAbstractController {
 	 * @return void
 	 */
 	public function tokenAction($grant_type, OAuthCode $code = NULL, $refresh_token = '') {
-		// [BW] CGL: strict comparison and constants ;)
-		if ($grant_type == 'refresh_token') {
+		if ($grant_type === SELF::GRANTTYPE_REFRESHTOKEN) {
 			$token = $this->oauthTokenRepository->findByRefreshToken($refresh_token);
 			if ($token !== NULL) {
 				$this->oauthTokenRepository->remove($token);
 			}
 		}
 		$this->oauthCodeRepository->removeCodeTokens($code);
-		// [BW] Maybe the expiration should be stored in the settings. That would also make it more readable
-		// [BW] 'Bearer' should be replaced with OAuthToken::TOKENTYPE_BEARER for readability and to avoid typos
-		$token = new OAuthToken($code, 3600, 'Bearer');
+		$token = new OAuthToken($code, $this->settings['Token']['access_token']['expiration_time'], OAuthToken::TOKENTYPE_BEARER);
 		$token->setOauthCode($code);
 		$this->oauthTokenRepository->add($token);
 		return json_encode(array(
