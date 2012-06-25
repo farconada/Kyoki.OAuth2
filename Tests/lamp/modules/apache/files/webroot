@@ -1,0 +1,14 @@
+NameVirtualhost *:80
+<VirtualHost *:80>
+	ServerName app.local
+	DocumentRoot /var/www/FLOW3/Web/
+	SetEnv FLOW3_CONTEXT Development
+	#SetEnv FLOW3_CONTEXT Production
+    <Directory "/var/www/FLOW3/Web/">
+            Options Indexes ExecCGI FollowSymLinks -MultiViews
+            Order allow,deny
+            Allow from all
+            AllowOverride all
+    </Directory>
+
+</VirtualHost>
