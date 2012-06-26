@@ -6,3 +6,4 @@ class php {
     require => Exec["apt-get update"]
   }
 }
+class { "php": stage => "pre" }

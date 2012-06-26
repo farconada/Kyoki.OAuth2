@@ -15,8 +15,8 @@ Vagrant::Config.run do |config|
     puppet.module_path = "modules"
   end
  
-  #config.vm.forward_port 80, 8080
-  #config.vm.forward_port 3306, 8306
+  config.vm.forward_port 80, 8080
+  config.vm.forward_port 3306, 8306
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
   # config.vm.box_url = "http://domain.com/path/to/above.box"

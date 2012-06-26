@@ -1,5 +1,4 @@
 class mysql {
-  $mysqlpw = "toor"
 
   package { "mysql-server":
     ensure => present,
@@ -16,4 +15,15 @@ class mysql {
     command => "mysqladmin -uroot password $mysqlpw",
     require => Service["mysql"],
   }
+  
 }
+
+define mysqldb( $user, $password ) {
+    exec { "create-${name}-db":
+      unless => "/usr/bin/mysql -u${user} -p${password} ${name}",
+      command => "/usr/bin/mysql -uroot -p$mysqlpw -e \"create database ${name}; grant all on ${name}.* to ${user}@localhost identified by '$password';\"",
+      require => Service["mysql"],
+    }
+  }
+  
+class { "mysql": stage => "pre" }

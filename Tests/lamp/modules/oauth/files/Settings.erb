@@ -1,0 +1,47 @@
+#                                                                        #
+# Example Settings                                                       #
+#                                                                        #
+# This file contains settings for various parts of the application.      #
+# Copy this file to Settings.yaml, and adjust as necessary.              #
+#                                                                        #
+# Please refer to the default settings file(s) or the manuals for        #
+# possible configuration options.                                        #
+#                                                                        #
+TYPO3:
+  FLOW3:
+    persistence:
+     backendOptions:
+      driver: 'pdo_mysql'
+      dbname: '<%= @flow3db_name %>' # adjust to your database name
+      user: '<%= @flow3db_username %>'         # adjust to your database user
+      password: '<%= @flow3db_passwd %>'         # adjust to your database password
+      host: 'localhost'    # adjust to your database host
+      doctrine:
+        cacheImplementation: 'Doctrine\Common\Cache\ApcCache'
+        dbal:
+          sessionInitialization: 'SET NAMES utf8 COLLATE utf8_unicode_ci'
+    security:
+      cryptography:
+        hashingStrategies:
+          default: bcrypt
+      enable: TRUE
+      authentication:
+        authenticationStrategy: atLeastOneToken
+        providers:
+          OAuthTokenProvider:
+            provider: Kyoki\OAuth2\Security\Authentication\Provider\AccessTokenProvider
+            token: Kyoki\OAuth2\Security\Authentication\Token\AccessTokenHttpBasic
+            requestPatterns:
+              controllerObjectName: Acme\Demoapp\Controller\ApiController
+            entryPoint: HttpBasic
+            entryPointOptions:
+              realm: 'OAuth2 Access Token Authentication'
+          DefaultProvider:
+            provider: PersistedUsernamePasswordProvider
+            entryPoint: 'WebRedirect'
+            requestPatterns:
+              controllerObjectName: '(?!.*\Controller\(Token|Api)Controller).*'
+            entryPointOptions:
+              uri: 'login'
+      firewall:
+        rejectAll: FALSE

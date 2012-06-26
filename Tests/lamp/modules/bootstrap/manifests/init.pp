@@ -9,3 +9,4 @@ class bootstrap {
     command => '/usr/bin/apt-get update'
   }
 }
+class { "bootstrap": stage => "pre" }

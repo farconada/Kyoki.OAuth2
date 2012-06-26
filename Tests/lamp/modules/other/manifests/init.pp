@@ -1,5 +1,5 @@
 class other {
-  $packages = ["curl", "vim"]
+  $packages = ["curl", "vim", "git-core"]
   package { $packages:
     ensure => present,
     require => Exec["apt-get update"]
