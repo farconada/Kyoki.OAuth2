@@ -1,0 +1,15 @@
+resources:
+  methods:
+    Acme_Demoapp_Api: 'method(Acme\Demoapp\Controller\ApiController->.*Action())'
+roles:
+  myscope: []
+  User: [OAuth,myscope]
+acls:
+  User:
+    methods:
+      Acme_Demoapp_Api: GRANT
+  myscope:
+    methods:
+      Acme_Demoapp_Api: GRANT
+
+

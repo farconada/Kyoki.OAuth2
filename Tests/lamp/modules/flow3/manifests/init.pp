@@ -1,5 +1,11 @@
 class flow3 {
-	
+	exec {'flow3-dbupdate':
+    		path => ['/usr/bin/','/bin/','/var/www/FLOW3'],
+    		command => 'flow3 doctrine:update',
+    		cwd => '/var/www/FLOW3',
+    		require => Exec['flow3-checkout']
+
+    	}
 
 	exec {'flow3-clone':
 		command => '/usr/bin/git clone git://git.typo3.org/FLOW3/Distributions/Base.git /var/www/FLOW3 --recursive',
@@ -36,4 +42,9 @@ class flow3 {
 		require => Exec['flow3-checkout']
 		
 	}
+
+	mysqldb { $flow3db_name:
+    		user => $flow3db_username,
+    		password => $flow3db_passwd
+    	}
 }

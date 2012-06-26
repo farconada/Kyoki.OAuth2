@@ -16,3 +16,4 @@ include php
 include mysql
 include flow3
 include oauth
+include demoapp

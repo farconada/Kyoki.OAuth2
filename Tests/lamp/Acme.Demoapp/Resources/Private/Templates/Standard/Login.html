@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <f:base/>
+</head>
+<body>
+<h2>Login</h2>
+<f:security.ifAuthenticated>
+    <f:then>
+           Your are already loggedin
+    </f:then>
+    <f:else>
+        <div class="panel">
+            <f:form action="authenticate" method="post" class="nice">
+                <h4>Get Login!!</h4>
+                <ol>
+                    <li>
+                        <div class="form-field username">
+                            <label id="usernameLabel" for="username">Username</label>
+                            <f:form.textfield
+                                    name="__authentication[TYPO3][FLOW3][Security][Authentication][Token][UsernamePassword][username]"
+                                    tabindex="1" id="username" class="small input-text"/>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="form-field password">
+                            <label id="passwordLabel" for="password">Password</label>
+                            <f:form.password
+                                    name="__authentication[TYPO3][FLOW3][Security][Authentication][Token][UsernamePassword][password]"
+                                    tabindex="2" id="password" class="small input-text"/>
+                        </div>
+                    </li>
+                    <li class="formButtons">
+                        <f:form.submit value="Login" class="small green nice button radius"/>
+                    </li>
+                </ol>
+            </f:form>
+        </div>
+    </f:else>
+</f:security.ifAuthenticated>
+</body>
+</html>

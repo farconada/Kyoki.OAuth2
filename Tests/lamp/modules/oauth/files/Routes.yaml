@@ -16,17 +16,17 @@
   name: 'Home'
   uriPattern: ''
   defaults:
-    '@package':    'F2.TuitLawyer'
+    '@package':    'Acme.Demoapp'
     '@controller': 'Standard'
     '@format':     'html'
     '@action':     'index'
 
 -
-  name: 'TuitLawyer'
-  uriPattern: '<TuitLawyerSubroutes>'
+  name: 'Demoapp'
+  uriPattern: '<DemoappSubroutes>'
   subRoutes:
-    TuitLawyerSubroutes:
-      package: F2.TuitLawyer
+    DemoappSubroutes:
+      package: Acme.Demoapp
 
 -
   name: 'OAuth2'
@@ -34,17 +34,6 @@
   subRoutes:
     OAuth2Subroutes:
       package: Kyoki.OAuth2
-
-###-
-###  name: 'Welcome'
-###  uriPattern: '<WelcomeSubroutes>'
-###  subRoutes:
-###    WelcomeSubroutes:
-###      package: TYPO3.Welcome
-
-##
-# FLOW3 subroutes
-#
 
 -
   name: 'FLOW3'

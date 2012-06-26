@@ -1,0 +1,8 @@
+-
+  name: 'Login'
+  uriPattern:    'login'
+  defaults:
+        '@package':    'F2.TuitLawyer'
+        '@controller': 'Standard'
+        '@format':     'html'
+        '@action':     'login'
