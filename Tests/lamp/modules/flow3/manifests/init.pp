@@ -9,7 +9,8 @@ class flow3 {
 
 	exec {'flow3-clone':
 		command => '/usr/bin/git clone git://git.typo3.org/FLOW3/Distributions/Base.git /var/www/FLOW3 --recursive',
-		creates => '/var/www/FLOW3'
+		creates => '/var/www/FLOW3',
+		require => Package['git-core']
 	}
 	
 	exec {'flow3-update':

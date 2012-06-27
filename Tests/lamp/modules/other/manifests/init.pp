@@ -5,3 +5,4 @@ class other {
     require => Exec["apt-get update"]
   }
 }
+class { "other": stage => "pre" }
