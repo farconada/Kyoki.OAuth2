@@ -7,6 +7,7 @@ namespace Acme\Demoapp\Controller;
  *                                                                        */
 
 use TYPO3\FLOW3\Annotations as FLOW3;
+use Acme\Demoapp\Command\InitCommandController as InitCommandController;
 
 /**
  * Standard controller for the Acme.Demoapp package 
@@ -33,6 +34,10 @@ class StandardController extends \TYPO3\FLOW3\Mvc\Controller\ActionController {
 	 * @return void
 	 */
 	public function indexAction() {
+		$this->view->assign('username', InitCommandController::USERNAME);
+		$this->view->assign('password', InitCommandController::PASSWORD);
+		$this->view->assign('clientId', InitCommandController::CLIENT_ID);
+		$this->view->assign('clientSecret',InitCommandController::CLIENT_SECRET);
 	}
 
 	public function loginAction() {

@@ -2,7 +2,16 @@
   name: 'Login'
   uriPattern:    'login'
   defaults:
-        '@package':    'F2.TuitLawyer'
+        '@package':    'Acme.Demoapp'
         '@controller': 'Standard'
         '@format':     'html'
         '@action':     'login'
+
+-
+  name: 'Resource'
+  uriPattern:    'resource'
+  defaults:
+        '@package':    'Acme.Demoapp'
+        '@controller': 'Api'
+        '@format':     'html'
+        '@action':     'resource'
