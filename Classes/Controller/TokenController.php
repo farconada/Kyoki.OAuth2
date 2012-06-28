@@ -52,7 +52,7 @@ class TokenController extends OAuthAbstractController {
 	 * @return void
 	 */
 	public function tokenAction($grant_type, OAuthCode $code = NULL, $refresh_token = '') {
-		if ($grant_type === SELF::GRANTTYPE_REFRESHTOKEN) {
+		if ($grant_type === self::GRANTTYPE_REFRESHTOKEN) {
 			$token = $this->oauthTokenRepository->findByRefreshToken($refresh_token);
 			if ($token !== NULL) {
 				$this->oauthTokenRepository->remove($token);

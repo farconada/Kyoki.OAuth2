@@ -63,7 +63,7 @@ class OAuthController extends OAuthAbstractController {
 		}
 		$oauthCode = new OAuthCode($client_id, $this->securityContext->getParty(), $scope);
 		$oauthCode->setRedirectUri($redirect_uri);
-		if ($response_type === SELF::RESPONSETYPE_CODE) {
+		if ($response_type === self::RESPONSETYPE_CODE) {
 			$this->oauthCodeRepository->add($oauthCode);
 			$this->persistenceManager->persistAll();
 			$this->view->assign('oauthCode', $oauthCode);

@@ -114,5 +114,12 @@ class OAuthClient {
 		return $this->secret;
 	}
 
+	/**
+	 * @param string $clientId
+	 */
+	public function setClientId($clientId) {
+		$this->clientId = $clientId;
+	}
+
 
 }

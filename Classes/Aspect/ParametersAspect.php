@@ -67,11 +67,11 @@ class ParametersAspect {
 	public function validateTokenParameters(\TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint) {
 		$arguments = $joinPoint->getMethodArguments();
 
-		if ($arguments['grant_type'] !== SELF::GRANTTYPE_REFRESHTOKEN && $arguments['grant_type'] !== SELF::GRANTTYPE_AUTHCODE) {
+		if ($arguments['grant_type'] !== self::GRANTTYPE_REFRESHTOKEN && $arguments['grant_type'] !== self::GRANTTYPE_AUTHCODE) {
 			throw new OAuthException('unsupported grant type', 1338317418);
 		}
 
-		if ($arguments['grant_type'] == SELF::GRANTTYPE_AUTHCODE && !isset($arguments['code'])) {
+		if ($arguments['grant_type'] == self::GRANTTYPE_AUTHCODE && !isset($arguments['code'])) {
 			throw new OAuthException('code not set', 1338317419);
 		}
 	}
