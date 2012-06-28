@@ -42,7 +42,7 @@ class InitCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 
 	public function createAccountCommand() {
 		if(!$this->accountRepository->findByAccountIdentifierAndAuthenticationProviderName(self::USERNAME, 'DefaultProvider')) {
-			$account = $this->accountFactory->createAccountWithPassword(SELF::USERNAME, self::PASSWORD, array(self::ROLE));
+			$account = $this->accountFactory->createAccountWithPassword(self::USERNAME, self::PASSWORD, array(self::ROLE));
 			$this->accountRepository->add($account);
 			$this->outputLine('account created, username: "%s", password: "%s"', array(self::USERNAME, self::PASSWORD));
 		}
