@@ -23,7 +23,8 @@ Vagrant::Config.run do |config|
 
   # Boot with a GUI so you can see the screen. (Default is headless)
   config.vm.boot_mode = :gui
-
+  config.vm.share_folder "logs", "/var/log/apache2", "./log"
+  config.vm.share_folder "www", "/var/www", "./www"
   # Assign this VM to a host-only network IP, allowing you to access it
   # via the IP. Host-only networks can talk to the host machine as well as
   # any other machines on the same network, but cannot be accessed (through this
