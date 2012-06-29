@@ -16,7 +16,7 @@ class demoapp {
     		path => ['/usr/bin/','/bin/','/var/www/FLOW3'],
     		command => 'flow3 init:createaccount',
     		cwd => '/var/www/FLOW3',
-    		require => [Exec['flow3-checkout'], File['/var/www/FLOW3/Packages/Application/Acme.Demoapp']]
+    		require => [Exec['flow3-checkout'], File['/var/www/FLOW3/Packages/Application/Acme.Demoapp'],Exec['flow3-dbupdate']]
 
     	}
 
@@ -24,7 +24,14 @@ class demoapp {
     		path => ['/usr/bin/','/bin/','/var/www/FLOW3'],
     		command => 'flow3 init:createclientapi',
     		cwd => '/var/www/FLOW3',
-    		require => [Exec['flow3-checkout'], File['/var/www/FLOW3/Packages/Application/Acme.Demoapp']]
+    		require => [Exec['flow3-checkout'], File['/var/www/FLOW3/Packages/Application/Acme.Demoapp'],Exec['flow3-dbupdate']]
+
+    	}
+    exec {'demoapp-createscope':
+    		path => ['/usr/bin/','/bin/','/var/www/FLOW3'],
+    		command => 'flow3 init:createscope',
+    		cwd => '/var/www/FLOW3',
+    		require => [Exec['flow3-checkout'], File['/var/www/FLOW3/Packages/Application/Acme.Demoapp'],Exec['flow3-dbupdate']]
 
     	}
 
