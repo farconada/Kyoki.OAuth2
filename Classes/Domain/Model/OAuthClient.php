@@ -41,6 +41,8 @@ class OAuthClient {
 	protected $description;
 
 	/**
+	 * You are authenticated as this party user when you request a new token
+	 *
 	 * @var \TYPO3\Party\Domain\Model\AbstractParty
 	 * @ORM\ManyToOne
 	 */
