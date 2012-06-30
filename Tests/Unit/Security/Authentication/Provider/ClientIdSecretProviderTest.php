@@ -54,10 +54,10 @@ class ClientIdSecretProviderTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$mockToken->expects($this->once())->method('setAuthenticationStatus')->with(\TYPO3\FLOW3\Security\Authentication\TokenInterface::AUTHENTICATION_SUCCESSFUL);
 		$mockToken->expects($this->once())->method('setAccount')->with($mockAccount);
 
-		$usernamePasswordCRProvider = $this->getAccessibleMock('Kyoki\OAuth2\Security\Authentication\Provider\ClientIdSecretProvider', array('dummy'), array('myProvider', array()));
-		$usernamePasswordCRProvider->_set('oauthClientRepository', $mockOAuthClientRepository);
+		$clientSecretProvider = $this->getAccessibleMock('Kyoki\OAuth2\Security\Authentication\Provider\ClientIdSecretProvider', array('dummy'), array('myProvider', array()));
+		$clientSecretProvider->_set('oauthClientRepository', $mockOAuthClientRepository);
 
-		$usernamePasswordCRProvider->authenticate($mockToken);
+		$clientSecretProvider->authenticate($mockToken);
 	}
 
 }
