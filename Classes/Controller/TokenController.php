@@ -62,12 +62,14 @@ class TokenController extends OAuthAbstractController {
 		$token = new OAuthToken($code, $this->settings['Token']['access_token']['expiration_time'], OAuthToken::TOKENTYPE_BEARER);
 		$token->setOauthCode($code);
 		$this->oauthTokenRepository->add($token);
-		return json_encode(array(
-			'access_token' => $token->getAccessToken(),
-			'token_type' => $token->getTokenType(),
-			'expires_in' => $token->getExpiresIn(),
-			'refresh_token' => $token->getRefreshToken()
-		));
+		$this->response->setContent(
+			json_encode(array(
+				'access_token' => $token->getAccessToken(),
+				'token_type' => $token->getTokenType(),
+				'expires_in' => $token->getExpiresIn(),
+				'refresh_token' => $token->getRefreshToken()
+			)));
+		$this->response->setHeader('Content-Type', 'application/json');
 	}
 
 }
