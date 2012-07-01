@@ -63,6 +63,7 @@ class OAuthCode {
 	protected $tokens;
 
 
+	// TODO redirectURI as constructor parameter????
 	public function __construct(OAuthClient $OAuthClient, AbstractParty $party, OAuthScope $scope) {
 		$secret = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
 		$this->code = $secret;
@@ -70,6 +71,7 @@ class OAuthCode {
 		$this->setOauthClient($OAuthClient);
 		$this->setParty($party);
 		$this->setOauthScope($scope);
+		$this->tokens = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 
 
