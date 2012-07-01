@@ -49,6 +49,7 @@ class OAuthClient {
 	protected $party;
 
 
+	// TODO party as constructor parameter???
 	public function __construct($description, $redirectUri) {
 		$clientId = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
 		$secret = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
