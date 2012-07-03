@@ -20,13 +20,8 @@ class AccessTokenProviderTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 		$mockAccount = $this->getMock('TYPO3\FLOW3\Security\Account', array(), array(), '', FALSE);
 
-		$mockParty = $this->getMock('TYPO3\Party\Domain\Model\Person', array(), array(), '', FALSE);
-		$partyAccounts = new \Doctrine\Common\Collections\ArrayCollection();
-		$partyAccounts->add($mockAccount);
-		$mockParty->expects($this->once())->method('getAccounts')->will($this->returnValue($partyAccounts));
-
 		$mockOAuthCode = $this->getMock('Kyoki\OAuth2\Domain\Model\OAuthCode',array(),array(),'',FALSE);
-		$mockOAuthCode->expects($this->once())->method('getParty')->will($this->returnValue($mockParty));
+		$mockOAuthCode->expects($this->once())->method('getAccount')->will($this->returnValue($mockAccount));
 
 		$mockOAuthToken = $this->getMock('Kyoki\OAuth2\Domain\Model\OAuthToken',array(),array(),'',FALSE);
 		$mockOAuthToken->expects($this->once())->method('getCreationDate')->will($this->returnValue(new \DateTime()));

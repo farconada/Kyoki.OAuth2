@@ -49,20 +49,20 @@ class ClientIdSecretProvider extends \TYPO3\FLOW3\Security\Authentication\Provid
 			throw new \TYPO3\FLOW3\Security\Exception\UnsupportedAuthenticationTokenException('This provider cannot authenticate the given token.', 1217339840);
 		}
 
-		$account = NULL;
 		$credentials = $authenticationToken->getCredentials();
+		/**
+		 * @var $oauthClient \Kyoki\OAuth2\Domain\Model\OAuthClient;
+		 */
+		$oauthClient = NULL;
 
 		if (is_array($credentials) && isset($credentials['client_id'])) {
-			/**
-			 * @var $oauthClient \Kyoki\OAuth2\Domain\Model\OAuthClient;
-			 */
 			$oauthClient = $this->oauthClientRepository->findByIdentifier($credentials['client_id']);
 		}
 
 		if (is_object($oauthClient)) {
 			if ($oauthClient->getSecret() == $credentials['client_secret']) {
 				$authenticationToken->setAuthenticationStatus(\TYPO3\FLOW3\Security\Authentication\TokenInterface::AUTHENTICATION_SUCCESSFUL);
-				$authenticationToken->setAccount($oauthClient->getParty()->getAccounts()->first());
+				$authenticationToken->setAccount($oauthClient->getAccount());
 			} else {
 				$authenticationToken->setAuthenticationStatus(\TYPO3\FLOW3\Security\Authentication\TokenInterface::WRONG_CREDENTIALS);
 			}

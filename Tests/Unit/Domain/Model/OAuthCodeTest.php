@@ -13,10 +13,10 @@ class OAuthCodeTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function codeIsInitialized() {
-		$client = new \Kyoki\OAuth2\Domain\Model\OAuthClient('a description', 'http:\\something');
-		$party =  new \TYPO3\Party\Domain\Model\Person();
+		$account = $this->getMock('TYPO3\FLOW3\Security\Account');
+		$client = new \Kyoki\OAuth2\Domain\Model\OAuthClient($account,'a description', 'http:\\something');
 	    $scope = new \Kyoki\OAuth2\Domain\Model\OAuthScope('myscope');
-		$oauthCode = new \Kyoki\OAuth2\Domain\Model\OAuthCode($client,$party,$scope);
+		$oauthCode = new \Kyoki\OAuth2\Domain\Model\OAuthCode($client,$account,$scope);
 		$this->assertGreaterThan(0,strlen($oauthCode->getCode()));
 	}
 
@@ -24,12 +24,12 @@ class OAuthCodeTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function codeInitializedRandom() {
+		$account = $this->getMock('TYPO3\FLOW3\Security\Account');
 		$secret = array();
 		for ($i=1; $i<=100;$i++) {
-			$client =  new \Kyoki\OAuth2\Domain\Model\OAuthClient('a description', 'http:\\something');
-			$party =  new \TYPO3\Party\Domain\Model\Person();
+			$client =  new \Kyoki\OAuth2\Domain\Model\OAuthClient($account,'a description', 'http:\\something');
 			$scope = new \Kyoki\OAuth2\Domain\Model\OAuthScope('myscope');
-			$oauthCode = new \Kyoki\OAuth2\Domain\Model\OAuthCode($client,$party,$scope);
+			$oauthCode = new \Kyoki\OAuth2\Domain\Model\OAuthCode($client,$account,$scope);
 			$secret[] = $oauthCode->getCode();
 		}
 		$this->assertTrue(count(array_unique($secret))==100);
@@ -39,10 +39,10 @@ class OAuthCodeTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function codeIsDisabledByDefault() {
-		$client =  new \Kyoki\OAuth2\Domain\Model\OAuthClient('a description', 'http:\\something');
-		$party =  new \TYPO3\Party\Domain\Model\Person();
+		$account = $this->getMock('TYPO3\FLOW3\Security\Account');
+		$client =  new \Kyoki\OAuth2\Domain\Model\OAuthClient($account,'a description', 'http:\\something');
 		$scope = new \Kyoki\OAuth2\Domain\Model\OAuthScope('myscope');
-		$oauthCode = new \Kyoki\OAuth2\Domain\Model\OAuthCode($client,$party,$scope);
+		$oauthCode = new \Kyoki\OAuth2\Domain\Model\OAuthCode($client,$account,$scope);
 		$this->assertFalse($oauthCode->getEnabled());
 	}
 }

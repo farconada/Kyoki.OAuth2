@@ -49,13 +49,13 @@ class AccessTokenProvider extends \TYPO3\FLOW3\Security\Authentication\Provider\
 			throw new \TYPO3\FLOW3\Security\Exception\UnsupportedAuthenticationTokenException('This provider cannot authenticate the given token.', 1217339840);
 		}
 
-		$account = NULL;
 		$credentials = $authenticationToken->getCredentials();
+		/**
+		 * @var $oauthToken \Kyoki\OAuth2\Domain\Model\OAuthToken;
+		 */
+		$oauthToken = NULL;
 
 		if (is_array($credentials) && isset($credentials['access_token'])) {
-			/**
-			 * @var $oauthToken \Kyoki\OAuth2\Domain\Model\OAuthToken;
-			 */
 			$oauthToken = $this->oauthTokenRepository->findByIdentifier($credentials['access_token']);
 		}
 
@@ -64,13 +64,9 @@ class AccessTokenProvider extends \TYPO3\FLOW3\Security\Authentication\Provider\
 			if (($oauthToken->getCreationDate()->getTimestamp() + $oauthToken->getExpiresIn()) < $now->getTimestamp()) {
 				$authenticationToken->setAuthenticationStatus(\TYPO3\FLOW3\Security\Authentication\TokenInterface::WRONG_CREDENTIALS);
 			} else {
-				/**
-				 * @var $account \TYPO3\FLOW3\Security\Account
-				 */
-				$account = $oauthToken->getOauthCode()->getParty()->getAccounts()->first();
 				$authenticationToken->setAuthenticationStatus(\TYPO3\FLOW3\Security\Authentication\TokenInterface::AUTHENTICATION_SUCCESSFUL);
 				$authenticationToken->setOauthToken($oauthToken);
-				$authenticationToken->setAccount($account);
+				$authenticationToken->setAccount($oauthToken->getOauthCode()->getAccount());
 			}
 
 		} elseif ($authenticationToken->getAuthenticationStatus() !== \TYPO3\FLOW3\Security\Authentication\TokenInterface::AUTHENTICATION_SUCCESSFUL) {

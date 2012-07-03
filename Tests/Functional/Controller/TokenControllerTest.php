@@ -56,23 +56,11 @@ class TokenControllerTest extends \TYPO3\FLOW3\Tests\FunctionalTestCase {
 		$account->setAuthenticationProviderName('DefaultProvider');
 		$this->persistenceManager->add($account);
 
-
-		$apiOwnerParty = new Person();
-		$apiOwnerParty->setName(new PersonName('Mr','I\'m the API Owner'));
-		$apiOwnerParty->addAccount($account);
-		$this->persistenceManager->add($apiOwnerParty);
-
-		$apiConsumerParty = new Person();
-		$apiConsumerParty->setName(new PersonName('Mr','I\'m the API Consumer'));
-		$apiConsumerParty->addAccount($account);
-		$this->persistenceManager->add($apiConsumerParty);
-
-
-		$oauthClientApi = new OAuthClient('test API', 'http://');
+		$oauthClientApi = new OAuthClient($account,'test API', 'http://');
 		$this->persistenceManager->add($oauthClientApi);
 		$oauthScope = new OAuthScope('myscope');
 		$this->persistenceManager->add($oauthScope);
-		$this->oauthCode = new OAuthCode($oauthClientApi,$apiConsumerParty,$oauthScope);
+		$this->oauthCode = new OAuthCode($oauthClientApi,$account,$oauthScope);
 		$this->oauthCode->setRedirectUri('http://consumerserver');
 		$this->persistenceManager->add($this->oauthCode);
 

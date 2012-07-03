@@ -61,7 +61,7 @@ class OAuthController extends OAuthAbstractController {
 		if ($isInAuthorizedUrl === FALSE || $isInAuthorizedUrl != 0 ) {
 			throw new OAuthException('This redirect_url is not authorized', 1337249067);
 		}
-		$oauthCode = new OAuthCode($client_id, $this->securityContext->getParty(), $scope);
+		$oauthCode = new OAuthCode($client_id, $this->securityContext->getAccount(), $scope);
 		$oauthCode->setRedirectUri($redirect_uri);
 		if ($response_type === self::RESPONSETYPE_CODE) {
 			$this->oauthCodeRepository->add($oauthCode);

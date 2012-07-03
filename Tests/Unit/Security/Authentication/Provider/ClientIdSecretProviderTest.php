@@ -36,13 +36,8 @@ class ClientIdSecretProviderTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 		$mockAccount = $this->getMock('TYPO3\FLOW3\Security\Account', array(), array(), '', FALSE);
 
-		$mockParty = $this->getMock('TYPO3\Party\Domain\Model\Person', array(), array(), '', FALSE);
-		$partyAccounts = new \Doctrine\Common\Collections\ArrayCollection();
-		$partyAccounts->add($mockAccount);
-		$mockParty->expects($this->once())->method('getAccounts')->will($this->returnValue($partyAccounts));
-
 		$mockOAuthClient = $this->getMock('Kyoki\OAuth2\Domain\Model\OAuthClient',array(),array(),'',FALSE);
-	    $mockOAuthClient->expects($this->once())->method('getParty')->will($this->returnValue($mockParty));
+	    $mockOAuthClient->expects($this->once())->method('getAccount')->will($this->returnValue($mockAccount));
 		$mockOAuthClient->expects($this->once())->method('getSecret')->will($this->returnValue(self::CLIENT_SECRET));
 
 

@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use TYPO3\FLOW3\Annotations as FLOW3;
 use Kyoki\OAuth2\Domain\Model\OAuthClient;
 use Kyoki\OAuth2\Domain\Model\OAuthScope;
-use TYPO3\Party\Domain\Model\AbstractParty;
+use TYPO3\FLOW3\Security\Account;
 
 /**
  * An OAuth consumer
@@ -51,10 +51,10 @@ class OAuthCode {
 	protected $redirectUri;
 
 	/**
-	 * @var \TYPO3\Party\Domain\Model\AbstractParty
+	 * @var \TYPO3\FLOW3\Security\Account
 	 * @ORM\ManyToOne
 	 */
-	protected $party;
+	protected $account;
 
 	/**
 	 * @var \Doctrine\Common\Collections\Collection<\Kyoki\OAuth2\Domain\Model\OAuthToken>
@@ -64,12 +64,12 @@ class OAuthCode {
 
 
 	// TODO redirectURI as constructor parameter????
-	public function __construct(OAuthClient $OAuthClient, AbstractParty $party, OAuthScope $scope) {
+	public function __construct(OAuthClient $OAuthClient, Account $account, OAuthScope $scope) {
 		$secret = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
 		$this->code = $secret;
 		$this->enabled = FALSE;
 		$this->setOauthClient($OAuthClient);
-		$this->setParty($party);
+		$this->setAccount($account);
 		$this->setOauthScope($scope);
 		$this->tokens = new \Doctrine\Common\Collections\ArrayCollection();
 	}
@@ -99,17 +99,17 @@ class OAuthCode {
 	}
 
 	/**
-	 * @param \TYPO3\Party\Domain\Model\AbstractParty $party
+	 * @param \TYPO3\FLOW3\Security\Account $account
 	 */
-	protected function setParty($party) {
-		$this->party = $party;
+	protected function setAccount($account) {
+		$this->account = $account;
 	}
 
 	/**
-	 * @return \TYPO3\Party\Domain\Model\AbstractParty
+	 * @return \TYPO3\FLOW3\Security\Account
 	 */
-	public function getParty() {
-		return $this->party;
+	public function getAccount() {
+		return $this->account;
 	}
 
 	/**

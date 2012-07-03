@@ -12,10 +12,10 @@ class OAuthTokenTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	protected $oauthCode;
 
 	public function setUp() {
-		$client = new \Kyoki\OAuth2\Domain\Model\OAuthClient('a description', 'http:\\something');
-		$party =  new \TYPO3\Party\Domain\Model\Person();
+		$account = $this->getMock('TYPO3\FLOW3\Security\Account');
+		$client = new \Kyoki\OAuth2\Domain\Model\OAuthClient($account,'a description', 'http:\\something');
 		$scope = new \Kyoki\OAuth2\Domain\Model\OAuthScope('myscope');
-		$this->oauthCode = new \Kyoki\OAuth2\Domain\Model\OAuthCode($client,$party,$scope);
+		$this->oauthCode = new \Kyoki\OAuth2\Domain\Model\OAuthCode($client,$account,$scope);
 	}
 
 	/**
