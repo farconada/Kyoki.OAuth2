@@ -54,6 +54,7 @@ class Policy implements \TYPO3\FLOW3\Security\Authorization\AccessDecisionVoterI
 		}
 		/**
 		 * @var $token \Kyoki\OAuth2\Security\Authentication\Token\AccessTokenHttpBasic
+		 * @var $scope \Kyoki\OAuth2\Domain\Model\OAuthScope
 		 */
 		$scope = $token->getOauthToken()->getOauthCode()->getOauthScope();
 		try {

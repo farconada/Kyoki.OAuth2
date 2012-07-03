@@ -41,22 +41,23 @@ class OAuthClient {
 	protected $description;
 
 	/**
-	 * You are authenticated as this party user when you request a new token
+	 * You are authenticated as this account user when you request a new token
 	 *
-	 * @var \TYPO3\Party\Domain\Model\AbstractParty
+	 * @var \TYPO3\FLOW3\Security\Account
 	 * @ORM\ManyToOne
 	 */
-	protected $party;
+	protected $account;
 
 
 	// TODO party as constructor parameter???
-	public function __construct($description, $redirectUri) {
+	public function __construct($account,$description, $redirectUri) {
 		$clientId = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
 		$secret = sha1(bin2hex(\TYPO3\FLOW3\Utility\Algorithms::generateRandomBytes(96)));
 		$this->setSecret($secret);
 		$this->clientId = $clientId;
 		$this->setDescription($description);
 		$this->setRedirectUri($redirectUri);
+		$this->account = $account;
 	}
 
 
@@ -81,12 +82,12 @@ class OAuthClient {
 		return $this->description;
 	}
 
-	public function setParty($party) {
-		$this->party = $party;
+	public function setAccount($account) {
+		$this->account = $account;
 	}
 
-	public function getParty() {
-		return $this->party;
+	public function getAccount() {
+		return $this->account;
 	}
 
 	/**

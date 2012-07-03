@@ -89,7 +89,7 @@ class ParametersAspect {
 			 * @var $code \Kyoki\OAuth2\Domain\Model\OAuthCode;
 			 */
 			$code = $joinPoint->getMethodArgument('code');
-			if ($this->securityContext->getParty() !== $code->getParty()) {
+			if ($this->securityContext->getAccount() !== $code->getAccount()) {
 				throw new OAuthException('You are not the owner of this security code', 1338318722);
 			}
 		}

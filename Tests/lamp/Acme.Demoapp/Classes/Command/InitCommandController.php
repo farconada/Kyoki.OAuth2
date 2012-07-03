@@ -48,18 +48,10 @@ class InitCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	 */
 	protected $scopeRepository;
 
-	/**
-	 * @FLOW3\Inject
-	 * @var \Acme\Demoapp\Domain\Repository\UserRepository
-	 */
-	protected $userRepository;
 
 	public function createAccountCommand() {
 		if(!$this->accountRepository->findByAccountIdentifierAndAuthenticationProviderName(self::USERNAME, 'DefaultProvider')) {
 			$account = $this->accountFactory->createAccountWithPassword(self::USERNAME, self::PASSWORD, array(self::ROLE));
-			$user = new User();
-			$this->userRepository->add($user);
-			$account->setParty($user);
 			$this->accountRepository->add($account);
 			$this->outputLine('account created, username: "%s", password: "%s"', array(self::USERNAME, self::PASSWORD));
 		}
@@ -67,13 +59,9 @@ class InitCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 
 	public function createClientapiCommand() {
 		if(!$this->clientRepository->findByIdentifier(self::CLIENT_ID)){
-			$client = new OAuthClient('Demo API Client','http://');
-			$user = new User();
  			$account = $this->accountFactory->createAccountWithPassword(self::USERNAME.'-api-owner', self::PASSWORD, array(self::ROLE));
-                        $this->accountRepository->add($account);
-                        $user->addAccount($account);
-			$this->userRepository->add($user);
-			$client->setParty($user);
+            $this->accountRepository->add($account);
+			$client = new OAuthClient($account,'Demo API Client','http://');
 			$client->setClientId(self::CLIENT_ID);
 			$client->setSecret(self::CLIENT_SECRET);
 			$this->clientRepository->add($client);

@@ -36,6 +36,12 @@ class OAuthCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 
 	/**
 	 * @FLOW3\Inject
+	 * @var \TYPO3\FLOW3\Security\AccountRepository
+	 */
+	protected $accountRepository;
+
+	/**
+	 * @FLOW3\Inject
 	 * @var \TYPO3\FLOW3\Persistence\PersistenceManagerInterface
 	 */
 	protected $persistenceManager;
@@ -58,16 +64,16 @@ class OAuthCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	 *
 	 * @param string $description description of the OAuth client
 	 * @param string $redirectUri URL match that is allowed to use the API
-	 * @param null $partyUuid The party persistence identifier that the OAuthClient blengs to
+	 * @param string $accountIdentifier The account persistence identifier that the OAuthClient blengs to
+	 * @param string $accountProvider Provider for the account
 	 */
-	public function newClientCommand($description, $redirectUri, $partyUuid = NULL) {
-		$oauthClient = new OAuthClient($description, $redirectUri);
-		if (!$partyUuid) {
-			$party = $this->persistenceManager->getObjectByIdentifier($this->settings['Client']['DefaultPartyUUID'], $this->settings['Client']['PartyClassName']);
+	public function newClientCommand($description, $redirectUri, $accountIdentifier = NULL, $accountProvider = NULL) {
+		if (!$accountIdentifier) {
+			$account = $this->accountRepository->findByAccountIdentifierAndAuthenticationProviderName($this->settings['Client']['DefaultAccountIdentifier'],$this->settings['Client']['DefaultAccountProvider']);
 		} else {
-			$party = $this->persistenceManager->getObjectByIdentifier($partyUuid, $this->settings['Client']['PartyClassName']);
+			$account = $this->accountRepository->findByAccountIdentifierAndAuthenticationProviderName($accountIdentifier,$accountProvider);
 		}
-		$oauthClient->setParty($party);
+		$oauthClient = new OAuthClient($account,$description, $redirectUri);
 		$this->oauthClientRepository->add($oauthClient);
 		$this->persistenceManager->persistAll();
 		
