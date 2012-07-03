@@ -106,20 +106,26 @@ class TokenControllerTest extends \TYPO3\FLOW3\Tests\FunctionalTestCase {
 	 * @test
 	 */
 	public function tokenActionReturnsBearerToken() {
+		$response = $this->browser->request('http://localhost/test/tokencontrollertest/token?grant_type=authorization_code&code='.$this->oauthCode->getCode());
+		$contentAsArray = json_decode($response->getContent(),TRUE);
+		$this->assertEquals(\Kyoki\OAuth2\Domain\Model\OAuthToken::TOKENTYPE_BEARER,$contentAsArray['token_type']);
 
 	}
 
 	/**
 	 * @test
 	 */
-	public function exceptionIfUnknownGrantType() {
-
+	public function errorIfUnknownGrantType() {
+		$response = $this->browser->request('http://localhost/test/tokencontrollertest/token?grant_type=XXXXXXX&code='.$this->oauthCode->getCode());
+		$this->assertGreaterThanOrEqual(500,$response->getStatusCode());
+		$contentAsArray = json_decode($response->getContent(),TRUE);
+		$this->assertEquals('unsupported grant type',$contentAsArray['error_message']);
 	}
 
 	/**
 	 * @test
 	 */
-	public function exceptionIfLoggedUserIsNotTheOwnerOfTheCode() {
+	public function errorIfLoggedUserIsNotTheOwnerOfTheCode() {
 
 	}
 
