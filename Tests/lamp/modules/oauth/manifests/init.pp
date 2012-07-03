@@ -3,7 +3,7 @@ class oauth {
 
 	exec {'kyoki-oauth2':
 		command => '/usr/bin/git clone git://github.com/farconada/Kyoki.OAuth2.git /var/www/FLOW3/Packages/Applications/Kyoki.OAuth2',
-		require => File['/var/www/FLOW3/Packages/Application'],
+		require => File['/var/www/FLOW3/Packages/Applications'],
 		creates => '/var/www/FLOW3/Packages/Applications/Kyoki.OAuth2',
 		notify => Exec['flow3-dbupdate']
 
