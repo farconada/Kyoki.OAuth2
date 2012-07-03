@@ -48,11 +48,6 @@ class InitCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	 */
 	protected $scopeRepository;
 
-	/**
-	 * @FLOW3\Inject
-	 * @var \Acme\Demoapp\Domain\Repository\UserRepository
-	 */
-	protected $userRepository;
 
 	public function createAccountCommand() {
 		if(!$this->accountRepository->findByAccountIdentifierAndAuthenticationProviderName(self::USERNAME, 'DefaultProvider')) {

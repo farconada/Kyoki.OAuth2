@@ -31,7 +31,7 @@ class flow3 {
 	
 	}
 
-	file {'/var/www/FLOW3/Packages/Application':
+	file {'/var/www/FLOW3/Packages/Applications':
 		ensure => directory,
 		require => Exec['flow3-clone']
 	}
