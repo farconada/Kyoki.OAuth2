@@ -19,35 +19,36 @@ SetUp step by step
    	    ./flow3 doctrine:update
 
 
-2. SetUp you FLOW3 config file configurations/Settings.yaml::
+2. SetUp you FLOW3 config file configurations/Settings.yaml
+	::
 
-	TYPO3:
-	  FLOW3:
-	    security:
-	       enable: TRUE
-	       authentication:
-	         authenticationStrategy: atLeastOneToken
-	         providers:
-	           # your DefaultProvider
-	           DefaultProvider:
-	             provider: PersistedUsernamePasswordProvider
-	             entryPoint: 'WebRedirect'
-	             entryPointOptions:
-	               uri: '/login'
-	             requestPatterns:
-	              # a regexp pattern to disable the DefaultProvider in every Controller for every package named ApiController or TokenController
-	              # It could be a better regexp of your own
-	              # TokenController belongs to the Kyoki.OAuth2 package
-	              # ApiController (or any other controller) is the controller securized by an OAuth access token
-	               controllerObjectName: '(?!.*(Api|Token)Controller).*'
-	           OAuthTokenProvider:
-	             provider: Kyoki\OAuth2\Security\Authentication\Provider\AccessTokenProvider
-	             token: Kyoki\OAuth2\Security\Authentication\Token\AccessTokenHttpBasic
-	             requestPatterns:
-		    # ApiController (or any other controller) is the controller securized by an OAuth access token
-	               controllerObjectName: Acme\Demoapp\Controller\ApiController
-	             entryPoint: HttpBasic
-	             entryPointOptions:
+		TYPO3:
+		  FLOW3:
+		    security:
+		       enable: TRUE
+		       authentication:
+		         authenticationStrategy: atLeastOneToken
+		         providers:
+		           # your DefaultProvider
+		           DefaultProvider:
+		             provider: PersistedUsernamePasswordProvider
+		             entryPoint: 'WebRedirect'
+		             entryPointOptions:
+		               uri: '/login'
+		             requestPatterns:
+		              # a regexp pattern to disable the DefaultProvider in every Controller for every package named ApiController or TokenController
+		              # It could be a better regexp of your own
+		              # TokenController belongs to the Kyoki.OAuth2 package
+		              # ApiController (or any other controller) is the controller securized by an OAuth access token
+		               controllerObjectName: '(?!.*(Api|Token)Controller).*'
+		           OAuthTokenProvider:
+		             provider: Kyoki\OAuth2\Security\Authentication\Provider\AccessTokenProvider
+		             token: Kyoki\OAuth2\Security\Authentication\Token\AccessTokenHttpBasic
+		             requestPatterns:
+			    # ApiController (or any other controller) is the controller securized by an OAuth access token
+		               controllerObjectName: Acme\Demoapp\Controller\ApiController
+		             entryPoint: HttpBasic
+		             entryPointOptions:
                		realm: 'OAuth2 Access Token Authentication'
 
 
@@ -74,6 +75,7 @@ SetUp step by step
 				}
 		
 		}
+
 
 5. Create a controller and protect it with a Policy.yaml
 	There are 2 roles:
@@ -102,9 +104,10 @@ SetUp step by step
 
 Notes
 ----------
-There is a Acme.Demoapp package inside the directory Tests/lamp/
-You can deploy a new virtualbox with vagrant with a fully FLOW3 installation with OAuth configured
-There is an exmple OAuth client/consumer in inside the directory Tests/lamp/client
+
+* There is a Acme.Demoapp package inside the directory Tests/lamp/
+* You can deploy a new virtualbox with vagrant with a fully FLOW3 installation with OAuth configured
+* There is an exmple OAuth client/consumer in inside the directory Tests/lamp/client
 
 
 
