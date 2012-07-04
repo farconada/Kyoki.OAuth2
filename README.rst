@@ -45,14 +45,14 @@ SetUp step by step
 		             provider: Kyoki\OAuth2\Security\Authentication\Provider\AccessTokenProvider
 		             token: Kyoki\OAuth2\Security\Authentication\Token\AccessTokenHttpBasic
 		             requestPatterns:
-			    # ApiController (or any other controller) is the controller securized by an OAuth access token
+			       # ApiController (or any other controller) is the controller securized by an OAuth access token
 		               controllerObjectName: Acme\Demoapp\Controller\ApiController
-		             entryPoint: HttpBasic
-		             entryPointOptions:
-               		realm: 'OAuth2 Access Token Authentication'
+		                 entryPoint: HttpBasic
+		                 entryPointOptions:
+               		           realm: 'OAuth2 Access Token Authentication'
 
 
-3. there are routes defined un Kyoki.OAuth2 for /authorize and /token
+3. There are routes defined in Kyoki.OAuth2 for /authorize and /token
 
 4. Ensure that the authenticateAction in you package redirects to requested url after successfuly login
 	for example::
